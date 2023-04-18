@@ -66,7 +66,7 @@ class Register extends Component<Props, State> {
         <PrimaryInput data={this.state.lastName} width={106} setData={this.setDataLastName} background={'red'} label={'Last Name'} />
         <PrimaryInput data={this.state.username} width={86} setData={this.setDataUsername} background={'red'} label={'Enter Phone'} />
         <PrimaryPassword data={this.state.password} width={106} setData={this.setDataPassword} background={'red'} label={'Enter Password'} />
-        <PrimaryPassword data={this.state.confirmPassword} width={106} setData={this.setDataPassword} background={'red'} label={'Confirm Password'} />
+        <PrimaryPassword data={this.state.confirmPassword} width={106} setData={this.setDataConfirmPassword} background={'red'} label={'Confirm Password'} />
         <WarningButton label={"SIGN IN"}/>
         <View style={{flexDirection:'row',position:'absolute',bottom:20}}>
           <Text style={{margin:0,padding:0,color:'white'}}>Already have account? </Text><TouchableOpacity
