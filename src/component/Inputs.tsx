@@ -1,5 +1,6 @@
 import React,{useState,useEffect} from 'react';
-import { View, Text, StyleSheet,TextInput } from 'react-native';
+import { View, Text, StyleSheet,TextInput,StatusBar,Pressable } from 'react-native';
+import Entypo from 'react-native-vector-icons/dist/Entypo';
 
 interface Props {
   label:String,
@@ -26,8 +27,9 @@ export const PrimaryInput: React.FC<Props> = ({label='Placeholder',data,setData,
   };
   return (
     <View>
+      <StatusBar barStyle={'light-content'} backgroundColor={'red'} />
       <View style={{marginLeft:20,marginBottom:-10,zIndex:2,width:width}}>
-        {labelShow?<Text style={[styles.textWhite,{width:width,paddingLeft:5,backgroundColor:'red'}]}>{label}</Text>:null}
+        {labelShow?<Text style={[styles.textWhite,{width:width, paddingLeft:5, backgroundColor:'red'}]}>{label}</Text>:null}
         </View>
       <TextInput 
       value={data.toString()} 
@@ -42,6 +44,52 @@ export const PrimaryInput: React.FC<Props> = ({label='Placeholder',data,setData,
   );
 };
 
+export const PrimaryPassword: React.FC<Props> = ({label='Placeholder',data,setData,background = 'red',width=60}) => {
+  const [labelShow,setLabelShow] = useState(false);
+  const [showPassword,setShowPassword] = useState(true);
+
+  const handleFocus = () => {
+    setLabelShow(true);
+  };
+
+
+  const handleBlur = () => {
+    if (!data) {
+      setLabelShow(false);
+    }
+  };
+  return (
+    <View>
+      <StatusBar barStyle={'light-content'} backgroundColor={'red'} />
+      <View style={{marginLeft:20,marginBottom:-10,zIndex:2,width:width}}>
+        {labelShow?<Text style={[styles.textWhite,{width:width, paddingLeft:5, backgroundColor:'red'}]}>{label}</Text>:null}
+        </View>
+      <TextInput 
+      secureTextEntry={showPassword}
+      value={data.toString()} 
+      style={styles.primary}
+      placeholder={label.toString()}
+      onChangeText={setData}
+      placeholderTextColor={!labelShow ? "#fff" : "transparent"}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      />
+      {showPassword?<Pressable
+      onPress={()=>{
+        setShowPassword(false);
+      }} style={{position:'absolute',right:16,bottom:35,}}>
+      <Entypo name="eye" size={30} color="#FFF" />
+      </Pressable>:<Pressable onPress={()=>{
+       setShowPassword(true);
+      }} style={{position:'absolute',right:16,bottom:35,}}>
+      <Entypo name="eye-with-line" size={30} color="#FFF" />
+      </Pressable>}
+      
+      
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   primary:{
     padding:10,
@@ -50,7 +98,7 @@ const styles = StyleSheet.create({
     borderColor:'white',
     color:'white',
     borderRadius:5,
-    marginBottom:10
+    marginBottom:20
   },
   textWhite:{
     color:'white',

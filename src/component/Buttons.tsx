@@ -45,7 +45,7 @@ export const DangerButton: React.FC<Props> = ({label='Hi'}) => {
 const styles = StyleSheet.create({
   primary:{
     padding:10,
-    width:200,
+    width:300,
     alignItems:'center',
     backgroundColor:'blue',
     shadowColor: "#000",
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     borderRadius:3},
   warning:{
     padding:10,
-    width:200,
+    width:300,
     alignItems:'center',
     backgroundColor:'orange',
     shadowColor: "#000",
