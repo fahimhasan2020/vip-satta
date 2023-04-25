@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react';
 import { View, Text, StyleSheet,TextInput,StatusBar,Pressable } from 'react-native';
 import Entypo from 'react-native-vector-icons/dist/Entypo';
 
+
 interface Props {
   label:String,
   data:String,
@@ -12,7 +13,7 @@ interface Props {
 
 
 
-export const PrimaryInput: React.FC<Props> = ({label='Placeholder',data,setData,background = 'red',width=60}) => {
+export const PrimaryInput: React.FC<Props> = ({label='Placeholder',data,setData,background = '#7e07a6',width=60}) => {
   const [labelShow,setLabelShow] = useState(false);
 
   const handleFocus = () => {
@@ -27,9 +28,9 @@ export const PrimaryInput: React.FC<Props> = ({label='Placeholder',data,setData,
   };
   return (
     <View>
-      <StatusBar barStyle={'light-content'} backgroundColor={'red'} />
+      <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
       <View style={{marginLeft:20,marginBottom:-10,zIndex:2,width:width}}>
-        {labelShow?<Text style={[styles.textWhite,{width:width, paddingLeft:5, backgroundColor:'red'}]}>{label}</Text>:null}
+        {labelShow?<Text style={[styles.textWhite,{width:width, paddingLeft:5, backgroundColor:'#7e07a6'}]}>{label}</Text>:null}
         </View>
       <TextInput 
       value={data.toString()} 
@@ -44,7 +45,31 @@ export const PrimaryInput: React.FC<Props> = ({label='Placeholder',data,setData,
   );
 };
 
-export const PrimaryPassword: React.FC<Props> = ({label='Placeholder',data,setData,background = 'red',width=60}) => {
+export const PrimaryInputOtp: React.FC<Props> = ({data,setData}) => {
+
+  const handleFocus = () => {
+   
+  };
+
+
+  const handleBlur = () => {
+   
+  };
+  return (
+    <View>
+      <TextInput 
+      value={data.toString()} 
+      style={styles.primary}
+      keyboardType='numeric'
+      onChangeText={setData}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      />
+    </View>
+  );
+};
+
+export const PrimaryPassword: React.FC<Props> = ({label='Placeholder',data,setData,background = '#7e07a6',width=60}) => {
   const [labelShow,setLabelShow] = useState(false);
   const [showPassword,setShowPassword] = useState(true);
 
@@ -60,9 +85,9 @@ export const PrimaryPassword: React.FC<Props> = ({label='Placeholder',data,setDa
   };
   return (
     <View>
-      <StatusBar barStyle={'light-content'} backgroundColor={'red'} />
+      <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
       <View style={{marginLeft:20,marginBottom:-10,zIndex:2,width:width}}>
-        {labelShow?<Text style={[styles.textWhite,{width:width, paddingLeft:5, backgroundColor:'red'}]}>{label}</Text>:null}
+        {labelShow?<Text style={[styles.textWhite,{width:width, paddingLeft:5, backgroundColor:'#7e07a6'}]}>{label}</Text>:null}
         </View>
       <TextInput 
       secureTextEntry={showPassword}
@@ -77,12 +102,12 @@ export const PrimaryPassword: React.FC<Props> = ({label='Placeholder',data,setDa
       {showPassword?<Pressable
       onPress={()=>{
         setShowPassword(false);
-      }} style={{position:'absolute',right:16,bottom:35,}}>
-      <Entypo name="eye" size={30} color="#FFF" />
+      }} style={{position:'absolute',right:16,bottom:39,}}>
+      <Entypo name="eye" size={21} color="#FFF" />
       </Pressable>:<Pressable onPress={()=>{
        setShowPassword(true);
-      }} style={{position:'absolute',right:16,bottom:35,}}>
-      <Entypo name="eye-with-line" size={30} color="#FFF" />
+      }} style={{position:'absolute',right:16,bottom:39,}}>
+      <Entypo name="eye-with-line" size={21} color="#FFF" />
       </Pressable>}
       
       

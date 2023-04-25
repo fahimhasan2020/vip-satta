@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button,StatusBar,StyleSheet,Image,TouchableOpacity } from 'react-native';
-import {PrimaryInput,PrimaryPassword} from "../component/Inputs"
-import {PrimaryButton,WarningButton} from "../component/Buttons"
+import { View, Text, TextInput, Button, StatusBar, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { PrimaryInput, PrimaryPassword } from "../component/Inputs"
+import { PrimaryButton, WarningButton } from "../component/Buttons"
+import { MainTitle } from '../component/Title';
 interface Props {
 }
 
@@ -16,7 +17,7 @@ class Login extends Component<Props, State> {
 
     this.state = {
       username: '',
-      password:''
+      password: ''
     };
     this.setDataUsername = this.setDataUsername.bind(this);
     this.setDataPassword = this.setDataPassword.bind(this);
@@ -33,19 +34,19 @@ class Login extends Component<Props, State> {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle={'light-content'} backgroundColor={'red'} />
+        <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
         <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <Text style={styles.text}>VIP SATTA</Text>
+        <MainTitle title="VIP SATTA" colors={['#8B4513', '#b3946d']} />
         <PrimaryInput data={this.state.username} width={86} setData={this.setDataUsername} background={'red'} label={'Enter Phone'} />
         <PrimaryPassword data={this.state.password} width={106} setData={this.setDataPassword} background={'red'} label={'Enter Password'} />
-        <WarningButton label={"SIGN IN"}/>
+        <WarningButton label={"SIGN IN"} />
 
-        <View style={{flexDirection:'row',position:'absolute',bottom:20}}>
-          <Text style={{margin:0,padding:0,color:'white'}}>Don't have any account? </Text><TouchableOpacity
-          onPress={()=>{
-            this.props.navigation.navigate('Register');
-          }}
-          style={{margin:0,padding:0}}><Text style={{color:'orange', fontWeight:'bold',padding:0}}>Register</Text></TouchableOpacity>
+        <View style={{ flexDirection: 'row', position: 'absolute', bottom: 20 }}>
+          <Text style={{ margin: 0, padding: 0, color: 'white' }}>Don't have any account? </Text><TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate('Register');
+            }}
+            style={{ margin: 0, padding: 0 }}><Text style={{ color: 'orange', fontWeight: 'bold', padding: 0 }}>Register</Text></TouchableOpacity>
         </View>
       </View>
     );
@@ -53,22 +54,22 @@ class Login extends Component<Props, State> {
 }
 
 const styles = StyleSheet.create({
-  container:{
-    flex:1,
-    alignItems:'center',
-    justifyContent:'center',
-    backgroundColor:'red'
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#7e07a6'
   },
-  logo:{
-    height:100,
-    width:100
+  logo: {
+    height: 100,
+    width: 100
   },
-  text:{
-    fontSize:20,
-    color:'white',
-    fontWeight:'bold',
-    marginTop:20,
-    marginBottom:40
+  text: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 40
   }
 })
 

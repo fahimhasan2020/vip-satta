@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet,Animated,StatusBar,Image } from 'react-native';
-import RNBootSplash from "react-native-bootsplash";
+import { View, Text, StyleSheet, Animated, StatusBar, Image } from 'react-native';
+import { hideNavigationBar } from 'react-native-navigation-bar-color';
+import {connect} from "react-redux"
 
 interface AppProps {
-  
+
 }
 
 interface AppState {
   message: string;
   translateY: Animated.Value;
+  bar: Boolean;
 }
 
 class App extends Component<AppProps, AppState> {
@@ -17,28 +19,33 @@ class App extends Component<AppProps, AppState> {
     this.state = {
       message: '',
       translateY: new Animated.Value(200),
+      bar: false
     };
   }
 
   componentDidMount = () => {
-    RNBootSplash.hide({ fade: true, duration: 500 });
+    hideNavigationBar();
+    setTimeout(() => {
+      this.setState({ bar: true });
+    }, 800)
     Animated.timing(this.state.translateY, {
-      toValue: 0, // animate translateY to 0
-      duration: 1000, // animation duration in milliseconds
-      useNativeDriver: true, // use native driver for performance
-    }).start(); // start the animation
-    setTimeout(()=>{
-        this.props.navigation.navigate('Login');
-    },3000);
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+    setTimeout(() => {
+      this.props.changeLogged(true);
+      //this.props.navigation.navigate('Login');
+
+    }, 3000);
   };
 
   render() {
     return (
       <View style={styles.container}>
-        
-        
+        {this.state.bar ? <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} /> : null}
         <Image source={require('../assets/logo.png')} style={styles.logo} />
-         <Animated.Text
+        <Animated.Text
           style={[styles.text, { transform: [{ translateY: this.state.translateY }] }]}
         >
           VIP SATTA
@@ -53,17 +60,33 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:'red'
+    backgroundColor: '#7e07a6'
   },
-  text:{
-    color:'white',
-    fontWeight:'bold',
-    fontSize:28
+  text: {
+    color: '#FFA500',
+    fontWeight: 'bold',
+    fontSize: 35
   },
-  logo:{
-    height:100,
-    width:100
+  logo: {
+    height: 100,
+    width: 100
   }
 });
 
-export default App;
+const mapDispatchToProps = dispatch => {
+  return{
+      changeAccessToken : (value) => {dispatch({type:'CHANGE_TOKEN',token: value})},
+      changeLogged : (value) => {dispatch({type:'LOGIN',logged: value})},
+  };
+
+};
+const mapStateToProps = state => {
+  return {
+      accessToken : state.auth.accessToken,
+      host: state.auth.host,
+      loggedIn:state.auth.loggedIn
+  }
+};
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(App);

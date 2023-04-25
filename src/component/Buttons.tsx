@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet,TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet,TouchableOpacity,ActivityIndicator } from 'react-native';
 
 interface Props {
-  label:String
+  label:String;
+  onPress: () => void
 }
 
 export const PrimaryButton: React.FC<Props> = ({label='Hi'}) => {
@@ -23,10 +24,10 @@ export const ThemeButton: React.FC<Props> = ({label='Hi'}) => {
     </View>
   );
 };
-export const WarningButton: React.FC<Props> = ({label='Hi'}) => {
+export const WarningButton: React.FC<Props> = ({label='Hi',onPress}) => {
   return (
     <View>
-      <TouchableOpacity style={styles.warning}>
+      <TouchableOpacity onPress={onPress} style={styles.warning}>
         <Text style={styles.textWhite}>{label}</Text>
       </TouchableOpacity>
     </View>

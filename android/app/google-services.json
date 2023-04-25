@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "887105119027",
+    "project_id": "vip-satta",
+    "storage_bucket": "vip-satta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:887105119027:android:b3d4b66f67ebe1727c9446",
+        "android_client_info": {
+          "package_name": "com.biddingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "887105119027-15mq9uij9u15abm4uhm10peob2ivtatu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.biddingapp",
+            "certificate_hash": "4ddc4e38d836704e903db141c447d393c0130925"
+          }
+        },
+        {
+          "client_id": "887105119027-pmkttbk04r4han1l2eadhnqaoojjs5rf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzgp76ScvTCXEYkKn47O89pYgXsy1uKSs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "887105119027-pmkttbk04r4han1l2eadhnqaoojjs5rf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

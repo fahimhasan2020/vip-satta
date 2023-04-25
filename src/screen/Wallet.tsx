@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet,StatusBar } from 'react-native';
 import Head from "../component/Head"
 
-interface GamesProps {
+interface Props {
+  
 }
 
-interface GamesState {
+interface State {
   message: string;
 }
 
-class Games extends Component<GamesProps, GamesState> {
-  constructor(props: GamesProps) {
+class Wallet extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       message: '',
@@ -24,8 +25,9 @@ class Games extends Component<GamesProps, GamesState> {
   render() {
     return (
       <View style={styles.container}>
-        <Head />
-       <Text>Games</Text>
+      <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
+      <Head />
+      <Text>Wallet</Text>
       </View>
     );
   }
@@ -33,8 +35,8 @@ class Games extends Component<GamesProps, GamesState> {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
 });
 
-export default Games;
+export default Wallet;
