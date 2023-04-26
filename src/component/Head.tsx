@@ -1,21 +1,32 @@
 import {Component} from "react"
 import {View,Text,Image,StatusBar,StyleSheet,Dimensions,Pressable} from "react-native"
 import Feather from "react-native-vector-icons/Feather"
+import MaterialIcons from "react-native-vector-icons/MaterialIcons"
+
+interface props{
+    navigation:any;
+}
+
+interface state {
+
+}
 
 const {height,width} = Dimensions.get("window");
-class Head extends Component{
+class Head extends Component<props,state>{
     render(){
+        const {navigation} = this.props;
         return(<View style={styles.container}>
-            <Pressable ><Feather name="align-left" size={30} color="#7e07a6" /></Pressable>
+            <Pressable onPress={()=>{navigation.toggleDrawer();}} ><Feather name="align-left" size={30} color="#7e07a6" /></Pressable>
             <Image source={require('../assets/logo.png')} style={{height:30,width:30}} />
-            <Pressable style={{backgroundColor:'#7e07a6',padding:6,borderRadius:3}}><Text style={{color:'#ffffff'}}>QR Code</Text></Pressable>
+            <Pressable style={{backgroundColor:'#7e07a6',padding:6,borderRadius:6}}>
+                <MaterialIcons name="support-agent" size={20} color={'#ffffff'} />
+            </Pressable>
             </View>)
     }
 }
 
 const styles = StyleSheet.create({
     container:{
-    marginTop:StatusBar.currentHeight,
     width:width,
     padding:10,
     backgroundColor:'white',
@@ -23,7 +34,8 @@ const styles = StyleSheet.create({
     elevation:10,
     justifyContent:'space-between',
     flexDirection:'row',
-    alignItems:'center'
+    alignItems:'center',
+    marginTop:StatusBar.currentHeight
     }
 })
 
