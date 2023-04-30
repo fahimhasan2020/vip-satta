@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Animated, StatusBar, Image } from 'react-native';
+import { View, Text, StyleSheet, Animated, StatusBar, Image,ToastAndroid} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { hideNavigationBar } from 'react-native-navigation-bar-color';
 import {connect} from "react-redux"
+import {hide} from "react-native-bootsplash"
 
 interface AppProps {
 
@@ -13,7 +15,7 @@ interface AppState {
   bar: Boolean;
 }
 
-class App extends Component<AppProps, AppState> {
+class Splash extends Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
     this.state = {
@@ -23,7 +25,8 @@ class App extends Component<AppProps, AppState> {
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount = async() => {
+    hide();
     hideNavigationBar();
     setTimeout(() => {
       this.setState({ bar: true });
@@ -33,11 +36,33 @@ class App extends Component<AppProps, AppState> {
       duration: 1000,
       useNativeDriver: true,
     }).start();
-    setTimeout(() => {
-      this.props.changeLogged(true);
-      //this.props.navigation.navigate('Login');
+    // setTimeout(() => {
+    //   //this.props.changeLogged(true);
+    //   this.props.navigation.navigate('Login');
 
-    }, 3000);
+    // }, 3000);
+    const loggedValue = await AsyncStorage.getItem("loggedIn");
+    if(loggedValue !== null || loggedValue !== ''){
+      if(loggedValue === 'true'){
+        const token = await AsyncStorage.getItem("token");
+        fetch(this.props.host+'get-user-details').then((response)=>response.json()).then(async(responseJson)=>{
+          console.log(responseJson);
+          if(responseJson.status === 1){
+            this.props.changeUser(responseJson.data);
+            this.props.changeLogged(true);
+          }else{
+            ToastAndroid.show("Token expired. Login now",ToastAndroid.SHORT);
+            await AsyncStorage.setItem("loggedIn",'false');
+            this.props.navigation.navigate('Login');
+          }
+        });
+      }else{
+        this.props.navigation.navigate('Login');
+      }
+    }else{
+      await AsyncStorage.setItem("loggedIn",'false');
+      this.props.navigation.navigate('Login');
+    }
   };
 
   render() {
@@ -77,6 +102,7 @@ const mapDispatchToProps = dispatch => {
   return{
       changeAccessToken : (value) => {dispatch({type:'CHANGE_TOKEN',token: value})},
       changeLogged : (value) => {dispatch({type:'LOGIN',logged: value})},
+      changeUser : (value) => {dispatch({type:'CHANGE_USER',user: value})},
   };
 
 };
@@ -89,4 +115,4 @@ const mapStateToProps = state => {
 };
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(App);
+export default connect(mapStateToProps,mapDispatchToProps)(Splash);

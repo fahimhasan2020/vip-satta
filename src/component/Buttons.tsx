@@ -3,7 +3,8 @@ import { View, Text, StyleSheet,TouchableOpacity,ActivityIndicator } from 'react
 
 interface Props {
   label:String;
-  onPress: () => void
+  onPress: () => void,
+  loading:boolean
 }
 
 export const PrimaryButton: React.FC<Props> = ({label='Hi'}) => {
@@ -24,11 +25,11 @@ export const ThemeButton: React.FC<Props> = ({label='Hi'}) => {
     </View>
   );
 };
-export const WarningButton: React.FC<Props> = ({label='Hi',onPress}) => {
+export const WarningButton: React.FC<Props> = ({label='Hi',onPress,loading=false}) => {
   return (
     <View>
       <TouchableOpacity onPress={onPress} style={styles.warning}>
-        <Text style={styles.textWhite}>{label}</Text>
+        {loading?<ActivityIndicator size={'small'} color={'white'} />:<Text style={styles.textWhite}>{label}</Text>}
       </TouchableOpacity>
     </View>
   );

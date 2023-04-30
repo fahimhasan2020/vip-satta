@@ -21,7 +21,7 @@ export default class StackHeader extends Component<props,state> {
         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
             <Pressable onPress={()=>{navigation.goBack()}} style={{padding:10,marginLeft:10}}><AntDesign name="arrowleft" size={30} color={'black'} /></Pressable>
             <Text style={{padding:10,fontSize:20}}>{title}</Text>
-            <View></View>
+            <View style={{width:50}}></View>
         </View>
         
       </View>

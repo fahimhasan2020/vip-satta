@@ -1,10 +1,10 @@
 import { Text, View, Pressable, StyleSheet } from 'react-native'
 import React, { Component } from 'react'
 import StackHeader from '../component/StackHeader'
-import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
-import { Table, Row, Rows } from 'react-native-table-component';
-import {Picker} from '@react-native-picker/picker';
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import { Picker } from '@react-native-picker/picker';
 import AntDesign from "react-native-vector-icons/AntDesign"
+import CustomTable from '../component/CustomTable';
 interface props {
 
 }
@@ -13,8 +13,8 @@ interface states {
 
     tableHead: string[];
     tableData: string[];
-    sortDate:Date;
-    selectedGame:string;
+    sortDate: Date;
+    selectedGame: string;
 }
 
 export default class GamesHistory extends Component<props, states> {
@@ -25,42 +25,39 @@ export default class GamesHistory extends Component<props, states> {
             tableData: [
 
             ],
-            sortDate:new Date(),
-            selectedGame:'',
+            sortDate: new Date(),
+            selectedGame: '',
         };
     }
 
-    showDatePicker = () =>{
+    showDatePicker = () => {
         DateTimePickerAndroid.open({
-          value: this.state.sortDate,
-          onChange:(event,selectedDate)=>{
-            const currentDate = selectedDate;
-            this.setState({sortDate:selectedDate});
-          },
-          mode: 'date',
+            value: this.state.sortDate,
+            onChange: (event, selectedDate) => {
+                const currentDate = selectedDate;
+                this.setState({ sortDate: selectedDate });
+            },
+            mode: 'date',
         });
-      }
+    }
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: 'white' }}>
                 <StackHeader title='Games History' navigation={this.props.navigation} />
                 <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}>
-                    <Pressable onPress={()=>{
+                    <Pressable onPress={() => {
                         this.showDatePicker();
-                    }} style={{ padding: 10, backgroundColor: '#ccc', width: 100, borderRadius:5,marginRight:10 }}><Text>{this.state.sortDate.toLocaleDateString()}</Text></Pressable>
-                    <Pressable onPress={()=>{
+                    }} style={{ padding: 10, backgroundColor: '#ccc', width: 100, borderRadius: 5, marginRight: 10 }}><Text>{this.state.sortDate.toLocaleDateString()}</Text></Pressable>
+                    <Pressable onPress={() => {
                         this.showDatePicker();
-                    }} style={{ padding: 10, backgroundColor: '#ccc', width: 100, borderRadius:5,marginRight:10 }}><Text>Select Game</Text></Pressable>
-                    <Pressable onPress={()=>{
+                    }} style={{ padding: 10, backgroundColor: '#ccc', width: 100, borderRadius: 5, marginRight: 10 }}><Text>Select Game</Text></Pressable>
+                    <Pressable onPress={() => {
                         this.showDatePicker();
-                    }} style={{ padding: 10, backgroundColor: 'blue', width: 40, borderRadius:5,marginRight:10 }}><AntDesign name="search1" color="white" size={20} /></Pressable>
-                    
+                    }} style={{ padding: 10, backgroundColor: 'blue', width: 40, borderRadius: 5, marginRight: 10 }}><AntDesign name="search1" color="white" size={20} /></Pressable>
+
                 </View>
                 <View style={{ margin: 20 }}>
-                    <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
-                        <Row data={this.state.tableHead} style={styles.head} textStyle={styles.text} />
-                        <Rows data={this.state.tableData} textStyle={styles.text} />
-                    </Table>
+                <CustomTable tableHead={this.state.tableHead} tableData={this.state.tableData} />
                 </View>
             </View>
         )

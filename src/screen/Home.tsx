@@ -5,6 +5,7 @@ import Lottie from 'lottie-react-native';
 import RNBootSplash from "react-native-bootsplash";
 import ScrollingText from '../component/ScrollText';
 import TodaysGames from '../component/TodaysGames';
+import { connect } from "react-redux"
 interface HomeProps {
 
 }
@@ -47,8 +48,10 @@ class Home extends Component<HomeProps, HomeState> {
             <ScrollingText text="NEW HELPLINE NUMBER 999-999-999" />
           </View>
           <View style={{ alignItems: 'center', padding: 10, margin: 10 }}>
-            <Text style={styles.regularFonts}>username</Text>
-            <Text style={styles.regularFonts}>RS.0</Text>
+            <Text style={styles.regularFonts}>
+              {this.props.user !== null ? this.props.user.first_name + ' ' + this.props.user.last_name : ''}
+            </Text>
+            <Text style={styles.regularFonts}>RS.{this.props.user !== null ? this.props.user.balance : ''}</Text>
             <Text style={styles.regularFonts}>Wallet Balance</Text>
           </View>
           <View style={{ width: '100%', backgroundColor: 'white', alignItems: 'center', height: 150, justifyContent: 'center', overflow: 'hidden', position: 'relative' }}>
@@ -66,7 +69,7 @@ class Home extends Component<HomeProps, HomeState> {
         <View style={{ width: '100%', padding: 15 }}>
           <Text style={styles.todaysGames}>Todays Games</Text>
           <TodaysGames />
-          
+
         </View>
       </ScrollView>
     );
@@ -100,4 +103,20 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Home;
+const mapDispatchToProps = dispatch => {
+  return {
+    changeAccessToken: (value) => { dispatch({ type: 'CHANGE_TOKEN', token: value }) },
+    changeLogged: (value) => { dispatch({ type: 'LOGIN', logged: value }) },
+    changeUser: (value) => { dispatch({ type: 'CHANGE_USER', user: value }) },
+  };
+
+};
+const mapStateToProps = state => {
+  return {
+    accessToken: state.auth.accessToken,
+    host: state.auth.host,
+    loggedIn: state.auth.loggedIn,
+    user: state.auth.user
+  }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

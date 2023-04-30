@@ -1,12 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const data = {
-    'host': 'http://nexkraft.com/',
-    'firstName': '',
-    'lastName': '',
-    'phoneNumber': '',
+    'host': 'http://192.168.0.126:8000/api/v1/',
     'accessToken': '',
     'loggedIn': false,
+    "user":null
 };
 
 const reducer = (state = data, action) => {
@@ -18,14 +16,21 @@ const reducer = (state = data, action) => {
                 loggedIn: action.logged,
             };
         case 'LOGIN':
+            AsyncStorage.setItem('loggedIn', 'true')
             return {
                 ...state,
                 loggedIn: action.logged
             };
         case 'CHANGE_TOKEN':
+            AsyncStorage.setItem('token',action.token.toString())
             return {
                 ...state,
                 accessToken: action.token
+            };
+        case 'CHANGE_USER':
+            return {
+                ...state,
+                user: action.user
             };
         default:
             return state;

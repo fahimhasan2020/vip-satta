@@ -1,82 +1,110 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Share,Linking } from 'react-native';
 import { createStackNavigator, TransitionPresets, CardStyleInterpolators } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { Home, Games, GamesSingle, Login, Register, Splash, Wallet, GamesHistory } from './Src'
+import { Home, Games, GamesSingle, Login, Register, Splash, Wallet, GamesHistory, Forget, Profile, EditProfile, HowToPlay, Commision, Result, TransectionHistory, TermsAndConditions } from './Src'
 import { connect } from "react-redux"
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import IonIcons from "react-native-vector-icons/Ionicons"
 import Entypo from "react-native-vector-icons/Entypo"
+import EvilIcons from "react-native-vector-icons/EvilIcons"
+import FontAwesome from "react-native-vector-icons/FontAwesome"
+import { whatsapp,whatsappMsg } from '../constants/Index';
+
+import store from "../store/store"
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+const shareWithFriends = async () => {
+  const result = await Share.share({
+    message:
+      'Refer your friends and receive 5% commission amount lifetime on every loss bidding (booking) of your friends  user Referral code  3820    https://vipsatta.in/release.apk',
+  });
+}
+
+const currentState = store.getState();
+
+const logoutAction = {
+  type: 'LOGOUT',
+  payload: {
+    logged: false,
+  },
+};
+
+
+
+
 const CustomDrawerContent = (props) => {
   return (
     <DrawerContentScrollView {...props}>
       {/* Your custom header */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>VIP SATTA</Text>
+        <EvilIcons name="user" size={120} color={'#fff'} />
+        <Text style={styles.headerText}>
+          {currentState.auth.user !== null ? currentState.auth.user.first_name + ' ' + currentState.auth.user.last_name : ''}
+
+        </Text>
       </View>
       {/* Your custom items */}
       <DrawerItem
         label="My Profile"
-        labelStyle={{color: 'white'}}
-        onPress={() => alert('Pressed Settings')}
-        icon={() => <MaterialIcons name="account-box"  size={30} color={'#fff'} />}
+        labelStyle={{ color: 'white' }}
+        onPress={() => props.navigation.navigate('Profile')}
+        icon={() => <MaterialIcons name="account-box" size={30} color={'#fff'} />}
       />
       <DrawerItem
         label="My PlayGame"
-        labelStyle={{color: 'white'}}
-        onPress={() => alert('Pressed Settings')}
-        icon={() => <MaterialIcons name="videogame-asset"  size={30} color={'#fff'} />}
+        labelStyle={{ color: 'white' }}
+        onPress={() => props.navigation.navigate('GamesHistory')}
+        icon={() => <MaterialIcons name="videogame-asset" size={30} color={'#fff'} />}
       />
       <DrawerItem
         label="Commision"
-        labelStyle={{color: 'white'}}
-        onPress={() => alert('Pressed Settings')}
-        icon={() => <MaterialIcons name="room-preferences"  size={30} color={'#fff'} />}
+        labelStyle={{ color: 'white' }}
+        onPress={() => props.navigation.navigate('Commision')}
+        icon={() => <MaterialIcons name="room-preferences" size={30} color={'#fff'} />}
       />
       <DrawerItem
         label="How to Play"
-        labelStyle={{color: 'white'}}
-        onPress={() => alert('Pressed Settings')}
-        icon={() => <MaterialIcons name="info"  size={30} color={'#fff'} />}
+        labelStyle={{ color: 'white' }}
+        onPress={() => props.navigation.navigate('HowToPlay')}
+        icon={() => <MaterialIcons name="info" size={30} color={'#fff'} />}
       />
       <DrawerItem
         label="Result History"
-        labelStyle={{color: 'white'}}
-        onPress={() => alert('Pressed Settings')}
-        icon={() => <MaterialIcons name="history"  size={30} color={'#fff'} />}
+        labelStyle={{ color: 'white' }}
+        onPress={() => props.navigation.navigate('Result')}
+        icon={() => <MaterialIcons name="history" size={30} color={'#fff'} />}
       />
       <DrawerItem
         label="Add/Withdrow List"
-        labelStyle={{color: 'white'}}
-        onPress={() => alert('Pressed Settings')}
-        icon={() => <MaterialIcons name="add"  size={30} color={'#fff'} />}
+        labelStyle={{ color: 'white' }}
+        onPress={() => props.navigation.navigate('TransectionHistory')}
+        icon={() => <MaterialIcons name="add" size={30} color={'#fff'} />}
       />
       <DrawerItem
         label="Help"
-        labelStyle={{color: 'white'}}
-        onPress={() => alert('Pressed Settings')}
-        icon={() => <MaterialIcons name="help"  size={30} color={'#fff'} />}
+        labelStyle={{ color: 'white' }}
+        onPress={() => Linking.openURL(`whatsapp://send?phone=${whatsapp}&text=${whatsappMsg}`)}
+        icon={() => <FontAwesome name="whatsapp" size={30} color={'#fff'} />}
       />
       <DrawerItem
         label="Share & Earn"
-        labelStyle={{color: 'white'}}
-        onPress={() => alert('Pressed Settings')}
-        icon={() => <MaterialIcons name="share"  size={30} color={'#fff'} />}
+        labelStyle={{ color: 'white' }}
+        onPress={() => shareWithFriends()}
+        icon={() => <MaterialIcons name="share" size={30} color={'#fff'} />}
       />
       <DrawerItem
         label="Terms & Condition"
-        labelStyle={{color: 'white'}}
-        onPress={() => alert('Pressed Settings')}
-        icon={() => <MaterialIcons name="file-copy"  size={30} color={'#fff'} />}
+        labelStyle={{ color: 'white' }}
+        onPress={() => props.navigation.navigate('TermsAndConditions')}
+        icon={() => <MaterialIcons name="file-copy" size={30} color={'#fff'} />}
       />
       <DrawerItem
         label="Logout"
-        labelStyle={{color: 'white'}}
-        onPress={() => alert('Pressed Logout')}
+        labelStyle={{ color: 'white' }}
+        onPress={() => store.dispatch(logoutAction)}
         icon={() => <MaterialIcons name="logout" size={30} color={'#fff'} />}
       />
     </DrawerContentScrollView>
@@ -95,6 +123,7 @@ function NonUserStack() {
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="Forget" component={Forget} />
     </Stack.Navigator>
   );
 }
@@ -172,6 +201,15 @@ function UserStack() {
       <Stack.Screen name="MyTabs" children={MyTabs} />
       <Stack.Screen name="GamesSingle" component={GamesSingle} />
       <Stack.Screen name="GamesHistory" component={GamesHistory} />
+
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="TransectionHistory" component={TransectionHistory} />
+      <Stack.Screen name="TermsAndConditions" component={TermsAndConditions} />
+      <Stack.Screen name="HowToPlay" component={HowToPlay} />
+      <Stack.Screen name="Commision" component={Commision} />
+      <Stack.Screen name="Result" component={Result} />
+
     </Stack.Navigator>
   );
 }
@@ -208,6 +246,9 @@ function HomeDrawer() {
 
 
 class Index extends Component<Props, State>{
+  componentDidMount(): void {
+    console.log(currentState);
+  }
   render() {
     return (
       <NavigationContainer>
