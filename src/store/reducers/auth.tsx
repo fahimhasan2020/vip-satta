@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const data = {
-    'host': 'http://192.168.0.126:8000/api/v1/',
+    'host': 'https://7041-202-134-14-159.ngrok-free.app/api/v1/',
     'accessToken': '',
     'loggedIn': false,
     "user":null
