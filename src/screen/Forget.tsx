@@ -4,7 +4,7 @@ import { PrimaryInput, PrimaryPassword } from "../component/Inputs"
 import { PrimaryButton, WarningButton } from "../component/Buttons"
 import { MainTitle } from '../component/Title';
 import auth from '@react-native-firebase/auth';
-import OTPInput from "react-native-otp";
+import {OTP} from "react-native-otp-form";
 import {connect} from "react-redux"
 interface Props {
 }
@@ -163,12 +163,12 @@ class Forget extends Component<Props, State> {
 </View>
     : this.state.resetState === 1
       ? <View>
-      <OTPInput
-            value={this.state.otp}
-            onChange={this.handleOTPChange}
-            tintColor="#FFFFFF"
-            offTintColor="#FFFFFF"
-            otpLength={6}
+      <OTP
+            codeCount={6}
+            onFinish={(value) => this.setState({ otp: value })}
+            containerStyle={{ marginTop: 50 }}
+            otpStyles={{ backgroundColor: '#eee' }}
+            keyboardType="number-pad"
           />
   <WarningButton onPress={()=>{this.verifyOtp()}} loading={this.state.loading} label={"Enter OTP"} />
   </View>

@@ -1,10 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const data = {
-    'host': 'https://7041-202-134-14-159.ngrok-free.app/api/v1/',
+    'host': 'https://vipsatta.orfactor.com/api/v1/',
     'accessToken': '',
     'loggedIn': false,
-    "user":null
+    "user": null
 };
 
 const reducer = (state = data, action) => {
@@ -22,7 +22,7 @@ const reducer = (state = data, action) => {
                 loggedIn: action.logged
             };
         case 'CHANGE_TOKEN':
-            AsyncStorage.setItem('token',action.token.toString())
+            AsyncStorage.setItem('token', action.token.toString())
             return {
                 ...state,
                 accessToken: action.token

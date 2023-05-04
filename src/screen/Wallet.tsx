@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, StatusBar, ScrollView, Pressable } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, ScrollView, Pressable, Linking } from 'react-native';
 import Head from "../component/Head"
 import AntDesign from "react-native-vector-icons/AntDesign"
 import CustomTable from '../component/CustomTable';
 import { connect } from "react-redux"
+import { NativeModules } from 'react-native';
+const UPI = NativeModules.UPI;
 
 interface WalletProps {
 
@@ -18,6 +20,7 @@ class Wallet extends Component<WalletProps, WalletState> {
   constructor(props: WalletProps) {
     super(props);
     this.state = {
+      amount: 500,
       tableHead: ['DATE', 'DESCRIPTION', 'AMOUNT'],
       tableData: [
         ["4/27/2023", "Deposit", "500"],
@@ -39,6 +42,13 @@ class Wallet extends Component<WalletProps, WalletState> {
 
   }
 
+  openUpi = async () => {
+    let UpiUrl =
+      "upi://pay?pa=someName@okicici&pn=dhava&mc=0000&mode=02&purpose=00";
+    let response = await Linking.openURL(UpiUrl);
+    console.log(response);
+  }
+
   render() {
     return (
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
@@ -50,7 +60,7 @@ class Wallet extends Component<WalletProps, WalletState> {
           <Text style={{ color: 'white', fontSize: 26, marginBottom: 10 }}>Rs.{this.props.user !== null ? this.props.user.balance : ''}</Text>
           <Text style={{ color: 'white', fontSize: 18, marginBottom: 10 }}>Wallet Balance</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-            <Pressable onPress={() => { }} style={styles.buttonOutlinedLeft}><AntDesign name="plus" size={10} color="white" /><Text style={styles.buttonText}>ADD MONEY</Text></Pressable>
+            <Pressable onPress={() => { this.openUpi() }} style={styles.buttonOutlinedLeft}><AntDesign name="plus" size={10} color="white" /><Text style={styles.buttonText}>ADD MONEY</Text></Pressable>
             <Pressable onPress={() => { }} style={styles.buttonOutlinedRight}><AntDesign name="minus" size={10} color="white" /><Text style={styles.buttonText}>WITHDROW MONEY</Text></Pressable>
           </View>
         </View>

@@ -36,11 +36,7 @@ class Splash extends Component<AppProps, AppState> {
       duration: 1000,
       useNativeDriver: true,
     }).start();
-    // setTimeout(() => {
-    //   //this.props.changeLogged(true);
-    //   this.props.navigation.navigate('Login');
-
-    // }, 3000);
+   
     const loggedValue = await AsyncStorage.getItem("loggedIn");
     if(loggedValue !== null || loggedValue !== ''){
       if(loggedValue === 'true'){
@@ -55,6 +51,9 @@ class Splash extends Component<AppProps, AppState> {
             await AsyncStorage.setItem("loggedIn",'false');
             this.props.navigation.navigate('Login');
           }
+        }).catch(error=>{
+          ToastAndroid.show("Unable to connect to internet",ToastAndroid.SHORT);
+          this.props.navigation.navigate('Login');
         });
       }else{
         this.props.navigation.navigate('Login');
