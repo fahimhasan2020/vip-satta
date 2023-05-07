@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Share,Linking } from 'react-native';
+import { View, Text, StyleSheet, Share, Linking } from 'react-native';
 import { createStackNavigator, TransitionPresets, CardStyleInterpolators } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,15 +11,14 @@ import IonIcons from "react-native-vector-icons/Ionicons"
 import Entypo from "react-native-vector-icons/Entypo"
 import EvilIcons from "react-native-vector-icons/EvilIcons"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
-import { whatsapp,whatsappMsg } from '../constants/Index';
+import { whatsapp, whatsappMsg } from '../constants/Index';
 
 import store from "../store/store"
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
-const shareWithFriends = async () => {
+const shareWithFriends = async (msg) => {
   const result = await Share.share({
-    message:
-      'Refer your friends and receive 5% commission amount lifetime on every loss bidding (booking) of your friends  user Referral code  3820    https://vipsatta.in/release.apk',
+    message:"Refer your friends and receive 5% commission amount lifetime on every loss bidding (booking) of your friends  user Referral code "+msg.toString()+" https://playvipmember.in/pvm.apk",
   });
 }
 
@@ -92,7 +91,7 @@ const CustomDrawerContent = (props) => {
       <DrawerItem
         label="Share & Earn"
         labelStyle={{ color: 'white' }}
-        onPress={() => shareWithFriends()}
+        onPress={() => shareWithFriends(currentState.auth.user.account_id)}
         icon={() => <MaterialIcons name="share" size={30} color={'#fff'} />}
       />
       <DrawerItem
@@ -247,7 +246,17 @@ function HomeDrawer() {
 
 class Index extends Component<Props, State>{
   componentDidMount(): void {
-    console.log(currentState);
+    fetch(this.props.host + 'get-preferences')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.props.changePreference(responseJson);
+      })
+    fetch(this.props.host + 'today-game')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.props.changeTodayGame(responseJson.data);
+        console.log(responseJson);
+      })
   }
   render() {
     return (
@@ -262,6 +271,8 @@ const mapDispatchToProps = dispatch => {
   return {
     changeAccessToken: (value) => { dispatch({ type: 'CHANGE_TOKEN', token: value }) },
     changeLogged: (value) => { dispatch({ type: 'LOGIN', logged: value }) },
+    changePreference: (value) => { dispatch({ type: 'PREERENCE_SET', logged: value }) },
+    changeTodayGame: (value) => { dispatch({ type: 'TODAY_GAME_SET', logged: value }) },
   };
 
 };
@@ -269,7 +280,8 @@ const mapStateToProps = state => {
   return {
     accessToken: state.auth.accessToken,
     host: state.auth.host,
-    loggedIn: state.auth.loggedIn
+    loggedIn: state.auth.loggedIn,
+    preference:state.auth.preference
   }
 };
 

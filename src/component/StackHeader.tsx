@@ -16,7 +16,7 @@ export default class StackHeader extends Component<props,state> {
   render() {
     const {title,navigation} = this.props;
     return (
-      <View style={{marginTop:StatusBar.currentHeight}}>
+      <View style={{marginTop:StatusBar.currentHeight,backgroundColor:'#fff',elevation:10}}>
         <StatusBar barStyle={'light-content'} backgroundColor={'white'} />
         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
             <Pressable onPress={()=>{navigation.goBack()}} style={{padding:10,marginLeft:10}}><AntDesign name="arrowleft" size={30} color={'black'} /></Pressable>

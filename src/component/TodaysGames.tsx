@@ -1,32 +1,28 @@
 import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, FlatList } from 'react-native';
 
-interface TodaysGamesProps {}
+interface TodaysGamesProps {
+  games: Array<{ id: number; game: string; result: string; time: string }>;
+}
 
-interface TodaysGamesStates {}
+interface TodaysGamesStates { }
 
-const Games = [
-  { id: 1, game: 'VIP DIAMOND', result: '77', time: '1:30PM' },
-  { id: 2, game: 'Taj', result: '60', time: '2:30PM' },
-  { id: 3, game: 'VIP SATTA', result: '69', time: '4:30PM' },
-  { id: 4, game: 'Taj', result: '77', time: '1:30PM' },
-  { id: 5, game: 'AH', result: '77', time: '1:30PM' },
-];
+const TodaysGames: React.FC<TodaysGamesProps> = ({ games }) => {
+  useEffect(() => {
 
-const TodaysGames: React.FC<TodaysGamesProps> = () => {
-  useEffect(() => {}, []);
+  }, []);
 
   return (
     <View style={{}}>
       <FlatList
         showsHorizontalScrollIndicator={false}
-        data={Games}
+        data={games}
         horizontal={true}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Text style={[styles.textCard]}>{item.game}</Text>
-            <Text style={[styles.textCard]}>{item.result}</Text>
-            <Text style={[styles.textCard]}>{item.time}</Text>
+            <Text style={[styles.textCard]}>{item.name}</Text>
+            <Text style={[styles.textCard]}>{item.shorting_no}</Text>
+            <Text style={[styles.textCard]}>{item.opening_time}</Text>
           </View>
         )}
         keyExtractor={item => item.id}
@@ -55,8 +51,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 10,
     marginBottom: 10,
-    marginLeft:5,
-    marginTop:7
+    marginLeft: 5,
+    marginTop: 7
   },
   textCard: {
     fontSize: 16,

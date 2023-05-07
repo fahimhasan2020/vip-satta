@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, StatusBar, StyleSheet, Image, TouchableOpacity, ToastAndroid, Pressable } from 'react-native';
+import { View, Text, TextInput, Button, StatusBar, StyleSheet, Image, TouchableOpacity, ToastAndroid, Pressable, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import { PrimaryInput, PrimaryPassword } from "../component/Inputs"
 import { PrimaryButton, WarningButton } from "../component/Buttons"
 import { MainTitle } from '../component/Title';
@@ -77,35 +77,39 @@ class Login extends Component<Props, State> {
 
 
   render() {
-    return (
-      <View style={styles.container}>
-        <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <MainTitle title="VIP SATTA" colors={['#8B4513', '#b3946d']} />
-        <PrimaryInput data={this.state.username} width={86} setData={this.setDataUsername} background={'red'} label={'Enter Phone'} />
-        <PrimaryPassword data={this.state.password} width={106} setData={this.setDataPassword} background={'red'} label={'Enter Password'} />
-        <View style={{ flexDirection: 'row', width: '100%', paddingLeft: 30, paddingRight: 30, paddingBottom: 20, justifyContent: 'space-between' }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <CheckBox
-              disabled={false}
-              value={this.state.remember}
-              tintColors={{true: 'orange',false:'#ffffff'}}
-              onValueChange={(newValue) => this.setState({ remember: newValue })}
-            /><Text style={{ color: 'white' }}>Remember me</Text>
+    return (<SafeAreaView style={{ flex: 1 ,backgroundColor: '#7e07a6'}}>
+      <KeyboardAvoidingView style={{ flex: 1, backgroundColor: '#7e07a6' }} behavior="padding" keyboardVerticalOffset={60}>
+        <View style={styles.container}>
+          <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
+          <Image source={require('../assets/logo.png')} style={styles.logo} />
+          <MainTitle title="VIP SATTA" colors={['#8B4513', '#b3946d']} />
+          <PrimaryInput data={this.state.username} width={86} setData={this.setDataUsername} background={'red'} label={'Enter Phone'} />
+          <PrimaryPassword data={this.state.password} width={106} setData={this.setDataPassword} background={'red'} label={'Enter Password'} />
+          <View style={{ flexDirection: 'row', width: '100%', paddingLeft: 30, paddingRight: 30, paddingBottom: 20, justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <CheckBox
+                disabled={false}
+                value={this.state.remember}
+                tintColors={{ true: 'orange', false: '#ffffff' }}
+                onValueChange={(newValue) => this.setState({ remember: newValue })}
+              /><Text style={{ color: 'white' }}>Remember me</Text>
+            </View>
+
+            <Pressable onPress={() => { this.props.navigation.navigate('Forget') }}><Text style={{ color: 'white', marginTop: 6 }}>Forget password?</Text></Pressable>
           </View>
+          <WarningButton onPress={() => { this.login() }} loading={this.state.loading} label={"SIGN IN"} />
 
-          <Pressable onPress={() => { this.props.navigation.navigate('Forget') }}><Text style={{ color: 'white',marginTop:6 }}>Forget password?</Text></Pressable>
+          
         </View>
-        <WarningButton onPress={() => { this.login() }} loading={this.state.loading} label={"SIGN IN"} />
-
-        <View style={{ flexDirection: 'row', position: 'absolute', bottom: 20 }}>
-          <Text style={{ margin: 0, padding: 0, color: 'white' }}>Don't have any account? </Text><TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('Register');
-            }}
-            style={{ margin: 0, padding: 0 }}><Text style={{ color: 'orange', fontWeight: 'bold', padding: 0 }}>Register</Text></TouchableOpacity>
-        </View>
-      </View>
+      </KeyboardAvoidingView>
+      <View style={{ flexDirection: 'row', position: 'absolute', bottom: 20,width:'100%',alignItems:'center',justifyContent:'center' }}>
+            <Text style={{ margin: 0, padding: 0, color: 'white' }}>Don't have any account? </Text><TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('Register');
+              }}
+              style={{ margin: 0, padding: 0 }}><Text style={{ color: 'orange', fontWeight: 'bold', padding: 0 }}>Register</Text></TouchableOpacity>
+          </View>
+    </SafeAreaView>
     );
   }
 }

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, StatusBar, StyleSheet, Image, TouchableOpacity, ScrollView, ToastAndroid, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, Button, StatusBar, StyleSheet, Image, TouchableOpacity, ScrollView, ToastAndroid, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import { PrimaryInput, PrimaryPassword, PrimaryInputOtp } from "../component/Inputs"
 import { WarningButton } from "../component/Buttons"
 import { MainTitle } from '../component/Title';
-import { OTP} from "react-native-otp-form";
+import { OTP } from "react-native-otp-form";
 import auth from '@react-native-firebase/auth';
 import { connect } from "react-redux"
 interface Props {
@@ -156,7 +156,7 @@ class Register extends Component<Props, State> {
 
   render() {
     return (<SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <KeyboardAvoidingView style={{ flex: 1, backgroundColor: '#7e07a6' }} behavior="padding"><ScrollView contentContainerStyle={styles.container}>
         <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
         <Image source={require('../assets/logo.png')} style={styles.logo} />
         <MainTitle title="VIP SATTA" colors={['#8B4513', '#b3946d']} />
@@ -182,7 +182,8 @@ class Register extends Component<Props, State> {
             }}
             style={{ margin: 0, padding: 0 }}><Text style={{ color: 'orange', fontWeight: 'bold', padding: 0 }}>Login</Text></TouchableOpacity>
         </View>
-      </ScrollView></SafeAreaView>
+      </ScrollView></KeyboardAvoidingView>
+    </SafeAreaView>
     );
   }
 }

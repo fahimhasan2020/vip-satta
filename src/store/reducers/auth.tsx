@@ -4,7 +4,9 @@ const data = {
     'host': 'https://vipsatta.orfactor.com/api/v1/',
     'accessToken': '',
     'loggedIn': false,
-    "user": null
+    "user": null,
+    "preference": null,
+    "todaysGames": []
 };
 
 const reducer = (state = data, action) => {
@@ -32,6 +34,16 @@ const reducer = (state = data, action) => {
                 ...state,
                 user: action.user
             };
+        case 'PREERENCE_SET':
+            return {
+                ...state,
+                preference: action.logged
+            }
+        case 'TODAY_GAME_SET':
+            return {
+                ...state,
+                todaysGames: action.logged
+            }
         default:
             return state;
     }

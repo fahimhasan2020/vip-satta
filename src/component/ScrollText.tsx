@@ -36,7 +36,7 @@ const ScrollingText: React.FC<ScrollingTextProps> = ({ text }) => {
           ],
         }}
       >
-        <Text style={{fontSize:20,fontWeight:'bold',color:'#05f0ec',textTransform:'uppercase'}}>{text}</Text>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#05f0ec', textTransform: 'uppercase' }}>{text}</Text>
       </Animated.View>
     </ScrollView>
   );

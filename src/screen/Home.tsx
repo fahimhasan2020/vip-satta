@@ -45,7 +45,7 @@ class Home extends Component<HomeProps, HomeState> {
         }}>
 
           <View style={{ width: '100%', paddingLeft: 20, paddingRight: 20, marginTop: 20 }}>
-            <ScrollingText text="NEW HELPLINE NUMBER 999-999-999" />
+            <ScrollingText text={this.props.preference.data[4].notice} />
           </View>
           <View style={{ alignItems: 'center', padding: 10, margin: 10 }}>
             <Text style={styles.regularFonts}>
@@ -68,7 +68,7 @@ class Home extends Component<HomeProps, HomeState> {
         </View>
         <View style={{ width: '100%', padding: 15 }}>
           <Text style={styles.todaysGames}>Todays Games</Text>
-          <TodaysGames />
+          <TodaysGames games={this.props.todaysGames} />
 
         </View>
       </ScrollView>
@@ -116,7 +116,9 @@ const mapStateToProps = state => {
     accessToken: state.auth.accessToken,
     host: state.auth.host,
     loggedIn: state.auth.loggedIn,
-    user: state.auth.user
+    user: state.auth.user,
+    preference: state.auth.preference,
+    todaysGames: state.auth.todaysGames
   }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -43,10 +43,7 @@ class Wallet extends Component<WalletProps, WalletState> {
   }
 
   openUpi = async () => {
-    let UpiUrl =
-      "upi://pay?pa=someName@okicici&pn=dhava&mc=0000&mode=02&purpose=00";
-    let response = await Linking.openURL(UpiUrl);
-    console.log(response);
+   await Linking.openURL('shohozseba.userapp://');
   }
 
   render() {
