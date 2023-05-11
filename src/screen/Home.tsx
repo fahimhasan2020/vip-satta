@@ -45,7 +45,7 @@ class Home extends Component<HomeProps, HomeState> {
         }}>
 
           <View style={{ width: '100%', paddingLeft: 20, paddingRight: 20, marginTop: 20 }}>
-            <ScrollingText text={this.props.preference.data[4].notice} />
+            <ScrollingText text={this.props.preference !== null ? this.props.preference.data[4].notice : ''} />
           </View>
           <View style={{ alignItems: 'center', padding: 10, margin: 10 }}>
             <Text style={styles.regularFonts}>

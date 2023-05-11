@@ -22,8 +22,7 @@ class Games extends Component<HomeProps, HomeState> {
   }
 
   componentDidMount = () => {
-
-
+    console.log('Ahha:', this.props.allGames)
   }
 
   render() {
@@ -38,17 +37,18 @@ class Games extends Component<HomeProps, HomeState> {
         <View style={styles.gamesCard}>
           <FlatList
             showsHorizontalScrollIndicator={false}
-            data={this.props.todaysGames}
+            showsVerticalScrollIndicator={false}
+            data={this.props.allGames}
             renderItem={({ item }) => (
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
                 <View>
-                  <Text style={styles.gamesCardText}>{item.name}</Text>
+                  <Text style={[styles.gamesCardText, { color: '#000' }]}>{item.name}</Text>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Fontisto name="clock" size={20} color="black" />
-                    <Text style={[styles.gamesCardText, { marginLeft: 5 }]}>{item.closing_time}</Text>
+                    <Text style={[styles.gamesCardText, { marginLeft: 5, color: '#000' }]}>{item.closing_time}</Text>
                   </View>
                 </View>
-                {item.result === "hold" ? <Pressable style={styles.warningButton}><Text style={{ color: 'white' }}>Timeout</Text></Pressable> : <Pressable onPress={() => { this.props.navigation.navigate('GamesSingle', { title: item.name }) }} style={styles.primaryButton}><Text style={{ color: 'white' }}>Play games</Text></Pressable>}
+                {item.timeout === "Yes" ? <Pressable style={styles.warningButton}><Text style={{ color: 'white' }}>Timeout</Text></Pressable> : <Pressable onPress={() => { this.props.navigation.navigate('GamesSingle', { title: item.name, id: item.id }) }} style={styles.primaryButton}><Text style={{ color: 'white' }}>Play games</Text></Pressable>}
 
               </View>
             )}
@@ -123,7 +123,7 @@ const mapStateToProps = state => {
     loggedIn: state.auth.loggedIn,
     user: state.auth.user,
     preference: state.auth.preference,
-    todaysGames: state.auth.todaysGames
+    allGames: state.auth.allGames
   }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Games);

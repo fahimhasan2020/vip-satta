@@ -67,7 +67,7 @@ class Forget extends Component<Props, State> {
           ToastAndroid.show("Account does not exist", ToastAndroid.SHORT);
         } else {
             try{
-                const confirmation = await auth().signInWithPhoneNumber('+88' + this.state.username);
+                const confirmation = await auth().signInWithPhoneNumber('+91' + this.state.username);
                 console.log(confirmation);
                 this.setState({ confirmation: confirmation });
                 const subscriber = await auth().onAuthStateChanged(this.onAuthStateChanged);

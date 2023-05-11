@@ -40,8 +40,15 @@ class Splash extends Component<AppProps, AppState> {
     const loggedValue = await AsyncStorage.getItem("loggedIn");
     if(loggedValue !== null || loggedValue !== ''){
       if(loggedValue === 'true'){
+       
         const token = await AsyncStorage.getItem("token");
-        fetch(this.props.host+'get-user-details').then((response)=>response.json()).then(async(responseJson)=>{
+        console.log(token);
+        fetch(this.props.host+'get-user-details',{
+          method:'GET',
+          headers:{
+            "Access-Token":token
+          }
+        }).then((response)=>response.json()).then(async(responseJson)=>{
           console.log(responseJson);
           if(responseJson.status === 1){
             this.props.changeUser(responseJson.data);

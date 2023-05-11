@@ -24,11 +24,6 @@ export default class Result extends Component<props, states> {
             tableHead: ['DATE', 'GALI', 'GHAZIABAD', 'FARIDABAD', 'DELHI BAZAR', 'SHRI GANESH','CIO GOLD','VIP DIAMOND','TAJ','DISHAWAR'],
             tableData: [
               ["4/27/2023", "20", "30","40","50","60","70","80","90","100"],
-              ["4/27/2023", "20", "30","40","50","60","70","80","90","100"],
-              ["4/27/2023", "20", "30","40","50","60","70","80","90","100"],
-              ["4/27/2023", "20", "30","40","50","60","70","80","90","100"],
-              ["4/27/2023", "20", "30","40","50","60","70","80","90","100"],
-              ["4/27/2023", "20", "30","40","50","60","70","80","90","100"],
             ],
             sortDate: new Date(),
             selectedGame: '',
@@ -68,6 +63,7 @@ export default class Result extends Component<props, states> {
         )
     }
 }
+
 
 
 const styles = StyleSheet.create({

@@ -133,7 +133,7 @@ class Register extends Component<Props, State> {
 
   handleRegister = async () => {
     this.setState({ loading: true });
-    const confirmation = await auth().signInWithPhoneNumber('+88' + this.state.username);
+    const confirmation = await auth().signInWithPhoneNumber('+91' + this.state.username);
     console.log(confirmation);
     this.setState({ confirmation: confirmation });
     this.setState({ loading: false });
@@ -156,33 +156,35 @@ class Register extends Component<Props, State> {
 
   render() {
     return (<SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView style={{ flex: 1, backgroundColor: '#7e07a6' }} behavior="padding"><ScrollView contentContainerStyle={styles.container}>
-        <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <MainTitle title="VIP SATTA" colors={['#8B4513', '#b3946d']} />
-        {!this.state.otpRunning ? <View><PrimaryInput data={this.state.referelId} width={70} setData={this.setDatareferelId} background={'red'} label={'Referel Id'} />
-          <PrimaryInput data={this.state.firstName} width={78} setData={this.setDataFirstName} background={'red'} label={'First Name'} />
-          <PrimaryInput data={this.state.lastName} width={78} setData={this.setDataLastName} background={'red'} label={'Last Name'} />
-          <PrimaryInput data={this.state.username} width={86} setData={this.setDataUsername} background={'red'} label={'Enter Phone'} />
-          <PrimaryInput data={this.state.email} width={80} setData={this.setDataEmail} background={'red'} label={'Enter Email'} />
-          <PrimaryPassword data={this.state.password} width={108} setData={this.setDataPassword} background={'red'} label={'Enter Password'} />
-          <PrimaryPassword data={this.state.confirmPassword} width={125} setData={this.setDataConfirmPassword} background={'red'} label={'Confirm Password'} />
-          <WarningButton loading={this.state.loading} onPress={() => { this.handleRegister() }} label={"SIGN UP"} /></View> : <View><OTP
-            codeCount={6}
-            onFinish={(value) => this.setState({ otp: value })}
-            containerStyle={{ marginTop: 50 }}
-            otpStyles={{ backgroundColor: '#eee' }}
-            keyboardType="number-pad"
-          /><View style={{ marginTop: 15 }}></View><WarningButton loading={this.state.loading} onPress={() => { this.verifyOtp() }} label={"ENTER OTP"} /></View>}
+      <KeyboardAvoidingView style={{ flex: 1, backgroundColor: '#7e07a6' }} behavior="padding">
+        <ScrollView contentContainerStyle={styles.container}>
+          <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
+          <Image source={require('../assets/logo.png')} style={styles.logo} />
+          <MainTitle title="VIP SATTA" colors={['#8B4513', '#b3946d']} />
+          {!this.state.otpRunning ? <View><PrimaryInput data={this.state.referelId} width={70} setData={this.setDatareferelId} background={'red'} label={'Referel Id'} />
+            <PrimaryInput data={this.state.firstName} width={78} setData={this.setDataFirstName} background={'red'} label={'First Name'} />
+            <PrimaryInput data={this.state.lastName} width={78} setData={this.setDataLastName} background={'red'} label={'Last Name'} />
+            <PrimaryInput data={this.state.username} width={86} setData={this.setDataUsername} background={'red'} label={'Enter Phone'} />
+            <PrimaryInput data={this.state.email} width={80} setData={this.setDataEmail} background={'red'} label={'Enter Email'} />
+            <PrimaryPassword data={this.state.password} width={108} setData={this.setDataPassword} background={'red'} label={'Enter Password'} />
+            <PrimaryPassword data={this.state.confirmPassword} width={125} setData={this.setDataConfirmPassword} background={'red'} label={'Confirm Password'} />
+            <WarningButton loading={this.state.loading} onPress={() => { this.handleRegister() }} label={"SIGN UP"} /></View> : <View><OTP
+              codeCount={6}
+              onFinish={(value) => this.setState({ otp: value })}
+              containerStyle={{ marginTop: 50 }}
+              otpStyles={{ backgroundColor: '#eee' }}
+              keyboardType="number-pad"
+            /><View style={{ marginTop: 15 }}></View><WarningButton loading={this.state.loading} onPress={() => { this.verifyOtp() }} label={"ENTER OTP"} /></View>}
 
-        <View style={{ flexDirection: 'row', marginTop: 15 }}>
-          <Text style={{ margin: 0, padding: 0, color: 'white' }}>Already have account? </Text><TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('Login');
-            }}
-            style={{ margin: 0, padding: 0 }}><Text style={{ color: 'orange', fontWeight: 'bold', padding: 0 }}>Login</Text></TouchableOpacity>
-        </View>
-      </ScrollView></KeyboardAvoidingView>
+          <View style={{ flexDirection: 'row', marginTop: 15 }}>
+            <Text style={{ margin: 0, padding: 0, color: 'white' }}>Already have account? </Text><TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('Login');
+              }}
+              style={{ margin: 0, padding: 0 }}><Text style={{ color: 'orange', fontWeight: 'bold', padding: 0 }}>Login</Text></TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
     );
   }
@@ -190,10 +192,11 @@ class Register extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#7e07a6'
+    backgroundColor: '#7e07a6',
+    marginTop: 100,
+    paddingBottom: 400
   },
   logo: {
     height: 100,

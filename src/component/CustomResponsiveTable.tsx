@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     scrolls: {
-        
+       
     },
     head: {
         flexDirection: 'row',
@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
         height: 70
     },
     headBox: {
-        padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
     },

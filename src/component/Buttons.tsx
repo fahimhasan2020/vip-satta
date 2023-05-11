@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet,TouchableOpacity,ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet,TouchableOpacity,ActivityIndicator,TouchableHighlight } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 interface Props {
   label:String;
@@ -28,9 +29,11 @@ export const ThemeButton: React.FC<Props> = ({label='Hi'}) => {
 export const WarningButton: React.FC<Props> = ({label='Hi',onPress,loading=false}) => {
   return (
     <View>
-      <TouchableOpacity onPress={onPress} style={styles.warning}>
-        {loading?<ActivityIndicator size={'small'} color={'white'} />:<Text style={styles.textWhite}>{label}</Text>}
-      </TouchableOpacity>
+      <TouchableHighlight onPress={onPress} >
+      <LinearGradient colors={['#f79205', '#91590a', '#4f3108']} style={styles.warning}>
+      {loading?<ActivityIndicator size={'small'} color={'white'} />:<Text style={styles.textWhite}>{label}</Text>}
+      </LinearGradient>
+      </TouchableHighlight>
     </View>
   );
 };
@@ -81,7 +84,6 @@ const styles = StyleSheet.create({
     padding:10,
     width:300,
     alignItems:'center',
-    backgroundColor:'orange',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

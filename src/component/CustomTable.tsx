@@ -20,7 +20,7 @@ const CustomTable: React.FC<Props> = ({ tableHead,tableData }) => {
         ))}
       </View>
       {tableData.length>0?tableData.map((rowItem,indexa)=>(<View key={indexa} style={styles.row}>
-        {rowItem.map((single:any,sindex:any)=>(<View key={sindex} style={[styles.rowBox, { width: headBoxWidth }]}><Text>{single}</Text></View>))}</View>)):null}
+        {rowItem.map((single:any,sindex:any)=>(<View key={sindex} style={[styles.rowBox, { width: headBoxWidth }]}><Text style={{color:'#000'}}>{single}</Text></View>))}</View>)):null}
       
     </View>
   );

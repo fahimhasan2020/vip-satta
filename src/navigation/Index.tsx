@@ -18,7 +18,7 @@ const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const shareWithFriends = async (msg) => {
   const result = await Share.share({
-    message:"Refer your friends and receive 5% commission amount lifetime on every loss bidding (booking) of your friends  user Referral code "+msg.toString()+" https://playvipmember.in/pvm.apk",
+    message: "Refer your friends and receive 5% commission amount lifetime on every loss bidding (booking) of your friends  user Referral code " + msg.toString() + " https://playvipmember.in/pvm.apk",
   });
 }
 
@@ -200,7 +200,6 @@ function UserStack() {
       <Stack.Screen name="MyTabs" children={MyTabs} />
       <Stack.Screen name="GamesSingle" component={GamesSingle} />
       <Stack.Screen name="GamesHistory" component={GamesHistory} />
-
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="TransectionHistory" component={TransectionHistory} />
@@ -208,7 +207,6 @@ function UserStack() {
       <Stack.Screen name="HowToPlay" component={HowToPlay} />
       <Stack.Screen name="Commision" component={Commision} />
       <Stack.Screen name="Result" component={Result} />
-
     </Stack.Navigator>
   );
 }
@@ -245,18 +243,29 @@ function HomeDrawer() {
 
 
 class Index extends Component<Props, State>{
-  componentDidMount(): void {
-    fetch(this.props.host + 'get-preferences')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.props.changePreference(responseJson);
-      })
-    fetch(this.props.host + 'today-game')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.props.changeTodayGame(responseJson.data);
-        console.log(responseJson);
-      })
+  fetchData = async () => {
+    try {
+      const [preferencesResponse, todayGameResponse, allGamesResponse] = await Promise.all([
+        fetch(this.props.host + "get-preferences"),
+        fetch(this.props.host + "today-game"),
+        fetch(this.props.host + "get-all-games"),
+      ]);
+      const preferences = await preferencesResponse.json();
+      const todayGame = await todayGameResponse.json();
+      const allGame = await allGamesResponse.json();
+      this.props.changePreference(preferences);
+      if (todayGame.hasOwnProperty("data")) {
+        this.props.changeTodayGame(todayGame.data);
+      }
+      if (allGame.hasOwnProperty("data")) {
+        this.props.changeAllGame(allGame.data);
+      }
+    } catch (error) {
+      console.log("no data fetched", error);
+    }
+  };
+  componentDidMount() {
+    this.fetchData();
   }
   render() {
     return (
@@ -273,6 +282,7 @@ const mapDispatchToProps = dispatch => {
     changeLogged: (value) => { dispatch({ type: 'LOGIN', logged: value }) },
     changePreference: (value) => { dispatch({ type: 'PREERENCE_SET', logged: value }) },
     changeTodayGame: (value) => { dispatch({ type: 'TODAY_GAME_SET', logged: value }) },
+    changeAllGame: (value) => { dispatch({ type: 'GAME_SET', logged: value }) },
   };
 
 };
@@ -281,7 +291,7 @@ const mapStateToProps = state => {
     accessToken: state.auth.accessToken,
     host: state.auth.host,
     loggedIn: state.auth.loggedIn,
-    preference:state.auth.preference
+    preference: state.auth.preference
   }
 };
 

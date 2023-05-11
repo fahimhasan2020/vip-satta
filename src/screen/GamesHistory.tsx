@@ -4,20 +4,21 @@ import StackHeader from '../component/StackHeader'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import AntDesign from "react-native-vector-icons/AntDesign"
+import {connect} from "react-redux"
 import CustomTable from '../component/CustomTable';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 interface props {
 
 }
 
 interface states {
-
     tableHead: string[];
     tableData: string[];
     sortDate: Date;
     selectedGame: string;
 }
 
-export default class GamesHistory extends Component<props, states> {
+class GamesHistory extends Component<props, states> {
     constructor(props: props) {
         super(props);
         this.state = {
@@ -28,6 +29,20 @@ export default class GamesHistory extends Component<props, states> {
             sortDate: new Date(),
             selectedGame: '',
         };
+    }
+
+    componentDidMount =async()=> {
+        const token =await  AsyncStorage.getItem("token");
+        fetch(this.props.host+'get-my-game-history',{
+            method:"GET",
+            headers:{
+                "Content-type":"application/json",
+                "Accept":"application/json",
+                "Access-Token":token
+            }
+        }).then((response)=>response.json()).then((responseJson)=>{
+            console.log(responseJson);
+        })
     }
 
     showDatePicker = () => {
@@ -63,6 +78,24 @@ export default class GamesHistory extends Component<props, states> {
         )
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+      changeAccessToken: (value) => { dispatch({ type: 'CHANGE_TOKEN', token: value }) },
+      changeLogged: (value) => { dispatch({ type: 'LOGIN', logged: value }) },
+      changeUser: (value) => { dispatch({ type: 'CHANGE_USER', user: value }) },
+    };
+  
+  };
+  const mapStateToProps = state => {
+    return {
+      accessToken: state.auth.accessToken,
+      host: state.auth.host,
+      loggedIn: state.auth.loggedIn,
+      user: state.auth.user
+    }
+  };
+  export default connect(mapStateToProps, mapDispatchToProps)(GamesHistory);
 
 
 const styles = StyleSheet.create({

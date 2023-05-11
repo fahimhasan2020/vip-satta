@@ -6,7 +6,8 @@ const data = {
     'loggedIn': false,
     "user": null,
     "preference": null,
-    "todaysGames": []
+    "todaysGames": [],
+    "allGames":[]
 };
 
 const reducer = (state = data, action) => {
@@ -43,6 +44,11 @@ const reducer = (state = data, action) => {
             return {
                 ...state,
                 todaysGames: action.logged
+            }
+        case 'GAME_SET':
+            return {
+                ...state,
+                allGames: action.logged
             }
         default:
             return state;
