@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, StatusBar, StyleSheet, Image, TouchableOpacity, ScrollView, ToastAndroid, SafeAreaView, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, Button, StatusBar, StyleSheet, Image, TouchableOpacity, ScrollView, ToastAndroid, SafeAreaView, KeyboardAvoidingView,Dimensions } from 'react-native';
 import { PrimaryInput, PrimaryPassword, PrimaryInputOtp } from "../component/Inputs"
 import { WarningButton } from "../component/Buttons"
 import { MainTitle } from '../component/Title';
@@ -155,12 +155,13 @@ class Register extends Component<Props, State> {
 
 
   render() {
-    return (<SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView style={{ flex: 1, backgroundColor: '#7e07a6' }} behavior="padding">
+    return (<SafeAreaView style={{ flex: 1,backgroundColor: '#7e07a6' }}>
+      <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height+100, top: 0, left: 0, opacity: 0.2 }} />
+      <KeyboardAvoidingView style={{ flex: 1,  }} behavior="padding">
         <ScrollView contentContainerStyle={styles.container}>
           <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
           <Image source={require('../assets/logo.png')} style={styles.logo} />
-          <MainTitle title="VIP SATTA" colors={['#8B4513', '#b3946d']} />
+          {/* <MainTitle title="VIP SATTA" colors={['#f4fc03', '#fccf03', '#fc9003']} /> */}
           {!this.state.otpRunning ? <View><PrimaryInput data={this.state.referelId} width={70} setData={this.setDatareferelId} background={'red'} label={'Referel Id'} />
             <PrimaryInput data={this.state.firstName} width={78} setData={this.setDataFirstName} background={'red'} label={'First Name'} />
             <PrimaryInput data={this.state.lastName} width={78} setData={this.setDataLastName} background={'red'} label={'Last Name'} />
@@ -194,13 +195,13 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#7e07a6',
     marginTop: 100,
     paddingBottom: 400
   },
   logo: {
-    height: 100,
-    width: 100
+    height: 200,
+    width: 200,
+    marginBottom:20
   },
   text: {
     fontSize: 20,

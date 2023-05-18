@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, Pressable, Modal, ToastAndroid } from 'react-native'
+import { Text, StyleSheet, View, Pressable, Modal, ToastAndroid, ActivityIndicator,Dimensions,Image } from 'react-native'
 import React, { Component } from 'react'
 import StackHeader from '../component/StackHeader'
 import { PrimaryButton, WarningButton } from "../component/Buttons"
@@ -8,32 +8,71 @@ import Entypo from "react-native-vector-icons/Entypo"
 import Feather from "react-native-vector-icons/Feather"
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import { connect } from "react-redux"
+import AsyncStorage from '@react-native-async-storage/async-storage'
 class EditProfile extends Component {
   constructor(props: Props) {
     super(props);
 
     this.state = {
       modalVisible: false,
-      password: '',
-      confirmPassword: ''
+      firstName: '',
+      lastName: '',
+      loading: false
     };
-    this.setDataPassword = this.setDataPassword.bind(this);
-    this.setDataConfirmPassword = this.setDataConfirmPassword.bind(this);
+    this.setDataFirstName = this.setDataFirstName.bind(this);
+    this.setDataLastName = this.setDataLastName.bind(this);
   }
-  handleResetPassword = () => {
+  handleNameUpdate = async() => {
+    this.setState({ loading: true });
+    const token = await AsyncStorage.getItem("token");
+    fetch(this.props.host + 'update-user-profile', {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        "Append": "application/json",
+        "Access-Token":token
+      },
+      body: JSON.stringify({
+        first_name: this.state.firstName,
+        last_name: this.state.lastName,
+      })
+    }).then((response) => response.json()).then((responseJson) => {
+      console.log(responseJson);
+      this.setState({ loading: false });
+      ToastAndroid.show("Prodile updaated", ToastAndroid.CENTER);
+      fetch(this.props.host + 'get-user-details', {
+        method: 'GET',
+        headers: {
+          "Access-Token": token
+        }
+      }).then((response) => response.json()).then(async (responseJson) => {
+        console.log(responseJson);
+        this.props.changeUser(responseJson.data);
+      }).catch(error => {
+        ToastAndroid.show("Unable to connect to internet", ToastAndroid.SHORT);
+      });
+    }).catch((error) => {
+      console.log(error);
+      ToastAndroid.show("Failed to update profile", ToastAndroid.CENTER);
+      this.setState({ loading: false });
+    })
+  }
 
+  componentDidMount(): void {
+    this.props.user !== null ? this.setState({ firstName: this.props.user.first_name, lastName: this.props.user.last_name }) : ''
   }
 
-  setDataPassword(password: string) {
-    this.setState({ password });
+  setDataFirstName(firstName: string) {
+    this.setState({ firstName });
   }
-  setDataConfirmPassword(confirmPassword: string) {
-    this.setState({ confirmPassword });
+  setDataLastName(lastName: string) {
+    this.setState({ lastName });
   }
   render() {
     return (
       <View style={styles.container}>
         <StackHeader title='Edit Profile' navigation={this.props.navigation} />
+        <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height+100, top: 0, left: 0, opacity: 0.2 }} />
         <View style={styles.card}>
           <View style={styles.nameSection}>
             <EvilIcons name="user" size={150} color={'white'} />
@@ -47,12 +86,14 @@ class EditProfile extends Component {
               </View>
               <Text style={styles.labels}>{this.props.user !== null ? this.props.user.phone : ''}</Text>
             </View>
-            <SecondaryInput data={this.state.password} width={116} setData={this.setDataPassword} background={'red'} label={'Enter First Name'} />
-            <SecondaryInput data={this.state.password} width={116} setData={this.setDataPassword} background={'red'} label={'Enter Last Name'} />
+            <SecondaryInput data={this.state.firstName} width={116} setData={this.setDataFirstName} background={'red'} label={'Enter First Name'} />
+            <SecondaryInput data={this.state.lastName} width={116} setData={this.setDataLastName} background={'red'} label={'Enter Last Name'} />
 
           </View>
         </View>
-        <Pressable onPress={() => { }} style={styles.button}><Entypo name="user" size={20} color={'#fff'} /><Text style={styles.buttonText}>UPDATE PROFILE</Text></Pressable>
+        <Pressable onPress={() => { this.handleNameUpdate() }} style={styles.button}>
+          {this.state.loading ? <ActivityIndicator size={'small'} color={'#fff'} style={{}} /> : <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}><Entypo name="user" size={20} color={'#fff'} /><Text style={styles.buttonText}>UPDATE PROFILE</Text></View>}
+        </Pressable>
       </View>
     )
   }
@@ -138,7 +179,8 @@ const styles = StyleSheet.create({
     width: 120
   },
   labelSection: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginBottom: 20
   },
   modalView: {
     margin: 20,

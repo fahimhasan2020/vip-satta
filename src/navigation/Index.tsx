@@ -4,7 +4,8 @@ import { createStackNavigator, TransitionPresets, CardStyleInterpolators } from 
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { Home, Games, GamesSingle, Login, Register, Splash, Wallet, GamesHistory, Forget, Profile, EditProfile, HowToPlay, Commision, Result, TransectionHistory, TermsAndConditions } from './Src'
+import Loader from '../component/Loader';
+import { Home, Games, GamesSingle, Login, Register, Support ,Splash, Wallet, GamesHistory, Forget, Profile, EditProfile, HowToPlay, Commision, Result, TransectionHistory, TermsAndConditions } from './Src'
 import { connect } from "react-redux"
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import IonIcons from "react-native-vector-icons/Ionicons"
@@ -207,6 +208,7 @@ function UserStack() {
       <Stack.Screen name="HowToPlay" component={HowToPlay} />
       <Stack.Screen name="Commision" component={Commision} />
       <Stack.Screen name="Result" component={Result} />
+      <Stack.Screen name="Support" component={Support} />
     </Stack.Navigator>
   );
 }
@@ -271,6 +273,7 @@ class Index extends Component<Props, State>{
     return (
       <NavigationContainer>
         {!this.props.loggedIn ? <NonUserStack /> : <HomeDrawer />}
+        {this.props.loader?<Loader />:null}
       </NavigationContainer>
     );
   }
@@ -291,7 +294,8 @@ const mapStateToProps = state => {
     accessToken: state.auth.accessToken,
     host: state.auth.host,
     loggedIn: state.auth.loggedIn,
-    preference: state.auth.preference
+    preference: state.auth.preference,
+    loader:state.auth.loader
   }
 };
 

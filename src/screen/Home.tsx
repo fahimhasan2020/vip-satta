@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, StatusBar, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, ScrollView, Dimensions, Image } from 'react-native';
 import Head from "../component/Head"
 import Lottie from 'lottie-react-native';
 import RNBootSplash from "react-native-bootsplash";
@@ -31,6 +31,7 @@ class Home extends Component<HomeProps, HomeState> {
     return (
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
+        <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height + 100, top: 0, left: 0, opacity: 0.2 }} />
         <Head navigation={this.props.navigation} />
         <View style={{
           backgroundColor: '#7e07a6', width: '90%', alignSelf: 'center', margin: 10, borderRadius: 30, shadowColor: "#000",
@@ -79,7 +80,7 @@ class Home extends Component<HomeProps, HomeState> {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    paddingBottom: 500,
+    paddingBottom: 200,
   },
   regularFonts: {
     color: 'white',

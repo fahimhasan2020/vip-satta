@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useRef } from "react";
-import { Button, View, Alert, StatusBar } from "react-native";
+import React, { useState, useCallback, useRef, } from "react";
+import { Button, View, Alert, StatusBar,Dimensions,Image } from "react-native";
 import YoutubePlayer from "react-native-youtube-iframe";
 
 export const HowToPlay = () => {
@@ -18,6 +18,7 @@ export const HowToPlay = () => {
 
   return (
     <View style={{ flex: 1, marginTop: StatusBar.currentHeight, backgroundColor: 'white' }}>
+      <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height+100, top: 0, left: 0, opacity: 0.2 }} />
       <YoutubePlayer
         height={300}
         play={playing}

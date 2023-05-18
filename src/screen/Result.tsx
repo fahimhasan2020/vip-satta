@@ -1,4 +1,4 @@
-import { Text, View, Pressable, StyleSheet } from 'react-native'
+import { Text, View, Pressable, StyleSheet,Image,Dimensions } from 'react-native'
 import React, { Component } from 'react'
 import StackHeader from '../component/StackHeader'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
@@ -44,6 +44,7 @@ export default class Result extends Component<props, states> {
         return (
             <View style={{ flex: 1, backgroundColor: 'white' }}>
                 <StackHeader title='Result History' navigation={this.props.navigation} />
+                <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height+100, top: 0, left: 0, opacity: 0.2 }} />
                 <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}>
                     <Pressable onPress={() => {
                         this.showDatePicker();

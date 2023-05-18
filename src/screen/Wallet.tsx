@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text, StyleSheet, StatusBar, ScrollView, Pressable, Linking, Modal, Dimensions, Platform, ToastAndroid, TextInput } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, ScrollView, Pressable, Linking, Modal, Dimensions, Platform, ToastAndroid, TextInput, Image } from 'react-native';
 import Head from "../component/Head"
 import AntDesign from "react-native-vector-icons/AntDesign"
 import CustomTable from '../component/CustomTable';
@@ -34,7 +34,7 @@ class Wallet extends Component<WalletProps, WalletState> {
       withdrowMoney: false,
       account: '',
       tableHead: ['DATE', 'DESCRIPTION', 'AMOUNT'],
-      platforms: '',
+      platforms: 'paytm',
       tableData: [],
       addMoney: false,
       amount: '',
@@ -51,6 +51,7 @@ class Wallet extends Component<WalletProps, WalletState> {
     return dateObj.toLocaleDateString();
   }
   componentDidMount = async () => {
+    this.props.changeLoader(true);
     try {
       const token = await AsyncStorage.getItem("token");
       fetch(this.props.host + 'get-user-balance-history', {
@@ -69,10 +70,11 @@ class Wallet extends Component<WalletProps, WalletState> {
           });
           this.setState({ tableData: newData });
         }
-
+        this.props.changeLoader(false);
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      this.props.changeLoader(false);
     }
   }
 
@@ -112,6 +114,7 @@ class Wallet extends Component<WalletProps, WalletState> {
   }
 
   requestWithdrowAmount = async () => {
+    console.log('Initiated');
     const token = await AsyncStorage.getItem("token");
     fetch(this.props.host + 'withdraw-request', {
       method: "POST",
@@ -122,7 +125,10 @@ class Wallet extends Component<WalletProps, WalletState> {
       },
       body: JSON.stringify({ amount: this.state.wamount, payment_method: this.state.platforms, pay_account: this.state.account })
     }).then((response) => response.json()).then((responseJson) => {
-      ToastAndroid.show(responseJson.data, ToastAndroid.SHORT);
+      console.log(responseJson);
+      ToastAndroid.show("Withdrow completed. Wait for approval", ToastAndroid.SHORT);
+    }).catch((error) => {
+      ToastAndroid.show("Failed to withdrow", ToastAndroid.SHORT);
     });
   }
 
@@ -131,7 +137,7 @@ class Wallet extends Component<WalletProps, WalletState> {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
         <Head navigation={this.props.navigation} />
-
+        <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("screen").height + 100, top: 0, left: 0, opacity: 0.2 }} />
         <View style={styles.addMoneyContainer}>
           <Text style={{ color: 'white', fontSize: 20, marginBottom: 10 }}>{this.props.user !== null ? this.props.user.first_name + ' ' + this.props.user.last_name : ''}</Text>
           <Text style={{ color: 'white', fontSize: 26, marginBottom: 10 }}>Rs.{this.props.user !== null ? this.props.user.balance : ''}</Text>
@@ -263,7 +269,7 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: 'white',
-    paddingBottom: 1500,
+    paddingBottom: 300,
   },
   addMoneyContainer: {
     margin: 20,
@@ -356,6 +362,7 @@ const mapDispatchToProps = dispatch => {
     changeAccessToken: (value) => { dispatch({ type: 'CHANGE_TOKEN', token: value }) },
     changeLogged: (value) => { dispatch({ type: 'LOGIN', logged: value }) },
     changeUser: (value) => { dispatch({ type: 'CHANGE_USER', user: value }) },
+    changeLoader: (value) => { dispatch({ type: 'CHANGE_LOADER', loader: value }) },
   };
 
 };

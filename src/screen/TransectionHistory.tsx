@@ -1,4 +1,4 @@
-import { Text, View, Pressable, StyleSheet } from 'react-native'
+import { Text, View, Pressable, StyleSheet,Dimensions,Image } from 'react-native'
 import React, { Component } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import StackHeader from '../component/StackHeader'
@@ -51,6 +51,7 @@ class TransectionHistory extends Component<props, states> {
     }
 
     componentDidMount = async () => {
+      this.props.changeLoader(true);
       try{
         const token = await AsyncStorage.getItem("token");
               fetch(this.props.host + 'get-user-balance-history', {
@@ -69,10 +70,12 @@ class TransectionHistory extends Component<props, states> {
                 });
                 this.setState({ tableData: newData });
                 }
+                this.props.changeLoader(false);
                 
               });
       }catch(error){
-        console.log(error)
+        console.log(error);
+        this.props.changeLoader(false);
       }
     }
 
@@ -80,6 +83,7 @@ class TransectionHistory extends Component<props, states> {
         return (
             <View style={{ flex: 1, backgroundColor: 'white' }}>
                 <StackHeader title='Add / Withdraw History' navigation={this.props.navigation} />
+                <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height+100, top: 0, left: 0, opacity: 0.2 }} />
                 <View style={{ margin: 20 }}>
                 <CustomTable tableHead={this.state.tableHead} tableData={this.state.tableData} />
                 </View>
@@ -158,6 +162,7 @@ const mapDispatchToProps = dispatch => {
     changeAccessToken: (value) => { dispatch({ type: 'CHANGE_TOKEN', token: value }) },
     changeLogged: (value) => { dispatch({ type: 'LOGIN', logged: value }) },
     changeUser: (value) => { dispatch({ type: 'CHANGE_USER', user: value }) },
+    changeLoader: (value) => { dispatch({ type: 'CHANGE_LOADER', loader: value }) },
   };
 
 };

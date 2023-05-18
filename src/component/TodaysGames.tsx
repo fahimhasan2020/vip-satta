@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: 10,
     marginLeft: 5,
-    marginTop: 7
+    marginTop: 7,
+    zIndex:2
   },
   textCard: {
     fontSize: 16,

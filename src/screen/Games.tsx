@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, StatusBar, ScrollView, Pressable, FlatList } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, ScrollView, Pressable, FlatList, Dimensions, Image } from 'react-native';
 import AntDesign from "react-native-vector-icons/AntDesign"
 import Fontisto from "react-native-vector-icons/Fontisto"
 import Head from "../component/Head"
@@ -30,6 +30,7 @@ class Games extends Component<HomeProps, HomeState> {
       <View style={styles.container}>
         <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
         <Head navigation={this.props.navigation} />
+        <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height + 100, top: 0, left: 0, opacity: 0.2 }} />
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20 }}>
           <Text>All Game</Text>
           <Pressable onPress={() => { this.props.navigation.navigate('GamesHistory') }} style={{ backgroundColor: 'orange', padding: 10, elevation: 10, width: 130, borderRadius: 10, flexDirection: 'row', alignItems: 'center' }}><AntDesign name="caretright" size={20} color="white" /><Text style={{ color: 'white', marginLeft: 5 }}>My Play Game</Text></Pressable>
@@ -65,7 +66,7 @@ class Games extends Component<HomeProps, HomeState> {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    paddingBottom: 1500,
+    paddingBottom: 300,
   },
   warningButton: {
     padding: 5, backgroundColor: 'orange', elevation: 10, width: 110, alignItems: 'center', borderRadius: 10, justifyContent: 'center', height: 40

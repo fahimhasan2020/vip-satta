@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, Pressable, Modal, ToastAndroid } from 'react-native'
+import { Text, StyleSheet, View, Pressable, Modal, ToastAndroid,Image,Dimensions } from 'react-native'
 import React, { Component } from 'react'
 import StackHeader from '../component/StackHeader'
 import { PrimaryButton, WarningButton } from "../component/Buttons"
@@ -60,6 +60,7 @@ class Profile extends Component {
     return (
       <View style={styles.container}>
         <StackHeader title='Profile' navigation={this.props.navigation} />
+        <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height+100, top: 0, left: 0, opacity: 0.2 }} />
         <View style={styles.card}>
           <View style={styles.nameSection}>
             <EvilIcons name="user" size={150} color={'white'} />

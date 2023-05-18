@@ -1,4 +1,4 @@
-import { Text, View, Pressable, StyleSheet } from 'react-native'
+import { Text, View, Pressable, StyleSheet,Dimensions,Image } from 'react-native'
 import React, { Component } from 'react'
 import StackHeader from '../component/StackHeader'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
@@ -43,7 +43,8 @@ export default class Commision extends Component<props, states> {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: 'white' }}>
-                <StackHeader title='Result History' navigation={this.props.navigation} />
+                <StackHeader title='Commision History' navigation={this.props.navigation} />
+                <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height+100, top: 0, left: 0, opacity: 0.2 }} />
                 <View style={{ margin: 20 }}>
                 <CustomTable tableHead={this.state.tableHead} tableData={this.state.tableData} />
                 </View>

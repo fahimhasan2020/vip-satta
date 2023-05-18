@@ -14,8 +14,9 @@ import Commision from "../screen/Commision"
 import Result from "../screen/Result"
 import TransectionHistory from "../screen/TransectionHistory"
 import TermsAndConditions from "../screen/TermsAndConditions"
+import Support from "../screen/Support"
 
 
 
 
-export {Home,Login,Register,Splash,Games,GamesSingle,Wallet,GamesHistory,Forget,Profile,EditProfile,HowToPlay,Commision,Result,TransectionHistory,TermsAndConditions}
+export {Home,Support,Login,Register,Splash,Games,GamesSingle,Wallet,GamesHistory,Forget,Profile,EditProfile,HowToPlay,Commision,Result,TransectionHistory,TermsAndConditions}

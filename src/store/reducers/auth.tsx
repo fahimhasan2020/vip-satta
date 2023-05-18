@@ -7,7 +7,8 @@ const data = {
     "user": null,
     "preference": null,
     "todaysGames": [],
-    "allGames":[]
+    "allGames": [],
+    "loader": false
 };
 
 const reducer = (state = data, action) => {
@@ -49,6 +50,11 @@ const reducer = (state = data, action) => {
             return {
                 ...state,
                 allGames: action.logged
+            }
+        case 'CHANGE_LOADER':
+            return {
+                ...state,
+                loader: action.loader
             }
         default:
             return state;

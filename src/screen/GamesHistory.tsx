@@ -1,4 +1,4 @@
-import { Text, View, Pressable, StyleSheet } from 'react-native'
+import { Text, View, Pressable, StyleSheet,Dimensions,Image } from 'react-native'
 import React, { Component } from 'react'
 import StackHeader from '../component/StackHeader'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
@@ -33,7 +33,7 @@ class GamesHistory extends Component<props, states> {
 
     componentDidMount =async()=> {
         const token =await  AsyncStorage.getItem("token");
-        fetch(this.props.host+'get-my-game-history',{
+        fetch(this.props.host+'get-result-history',{
             method:"GET",
             headers:{
                 "Content-type":"application/json",
@@ -41,7 +41,38 @@ class GamesHistory extends Component<props, states> {
                 "Access-Token":token
             }
         }).then((response)=>response.json()).then((responseJson)=>{
-            console.log(responseJson);
+            //console.log(responseJson);
+            let formattedResponse = [];
+
+            for(let i = 0; i < responseJson.data.length; i++) {
+            let row = [];
+            let data = responseJson.data[i];
+            
+            row.push(data['game_id']);
+            
+            if(data['type'] === 'number') {
+                row.push('');
+                row.push('');
+                row.push(data['bid_amount']);
+            } else if(data['type'] === 'andar') {
+                row.push(data['bid_amount']);
+                row.push('');
+                row.push('');
+            } else if(data['type'] === 'bahar') {
+                row.push('');
+                row.push(data['bid_amount']);
+                row.push('');
+            }
+            row.push(data['bid_amount']);
+            row.push(data['winning_amount']);
+            
+            formattedResponse.push(row);
+            }
+
+            console.log(formattedResponse);
+            this.setState({tableData:formattedResponse});
+        }).catch((error)=>{
+            console.log(error);
         })
     }
 
@@ -58,6 +89,7 @@ class GamesHistory extends Component<props, states> {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: 'white' }}>
+                <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height+100, top: 0, left: 0, opacity: 0.2 }} />
                 <StackHeader title='Games History' navigation={this.props.navigation} />
                 <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}>
                     <Pressable onPress={() => {
