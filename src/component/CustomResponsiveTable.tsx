@@ -25,7 +25,7 @@ const CustomResponsiveTable: React.FC<Props> = ({ tableHead, tableData }) => {
                         <View key={indexa} style={styles.row}>
                             {rowItem.map((single: any, sindex: any) => (
                                 <View key={sindex} style={[styles.rowBox, { width: `${headBoxWidth}%` }]}>
-                                    <Text>{single}</Text>
+                                    <Text style={{ width: 40, fontSize: 8 }}>{single}</Text>
                                 </View>
                             ))}
                         </View>
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     scrolls: {
-       
+
     },
     head: {
         flexDirection: 'row',
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     headBox: {
         alignItems: 'center',
         justifyContent: 'center',
+
     },
     headBoxFont: {
         fontSize: 10,

@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, Pressable, Modal, ToastAndroid,Image,Dimensions } from 'react-native'
+import { Text, StyleSheet, View, Pressable, Modal, ToastAndroid, Image, Dimensions } from 'react-native'
 import React, { Component } from 'react'
 import StackHeader from '../component/StackHeader'
 import { PrimaryButton, WarningButton } from "../component/Buttons"
@@ -28,6 +28,7 @@ class Profile extends Component {
     } else if (this.state.password.length < 5 && this.state.password !== '') {
       ToastAndroid.show("Password field lenth should be longer then 5 charracter", ToastAndroid.SHORT);
     } else {
+      console.log('changing');
       fetch(this.props.host + 'update-password', {
         method: "POST",
         headers: {
@@ -40,6 +41,7 @@ class Profile extends Component {
         })
       }).then((response) => response.json()).then((responseJson) => {
         ToastAndroid.show("Password changed", ToastAndroid.SHORT);
+        console.log(responseJson);
         setTimeout(() => {
           this.setState({ modalVisible: false });
         }, 2000);
@@ -60,7 +62,7 @@ class Profile extends Component {
     return (
       <View style={styles.container}>
         <StackHeader title='Profile' navigation={this.props.navigation} />
-        <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height+100, top: 0, left: 0, opacity: 0.2 }} />
+        <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height + 100, top: 0, left: 0, opacity: 0.2 }} />
         <View style={styles.card}>
           <View style={styles.nameSection}>
             <EvilIcons name="user" size={150} color={'white'} />
@@ -204,7 +206,8 @@ const styles = StyleSheet.create({
   labels: {
     fontSize: 16,
     fontWeight: 'bold',
-    width: 120
+    width: 120,
+    color: '#000'
   },
   labelSection: {
     flexDirection: 'row'

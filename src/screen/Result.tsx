@@ -1,10 +1,10 @@
-import { Text, View, Pressable, StyleSheet,Image,Dimensions } from 'react-native'
+import { Text, View, Pressable, StyleSheet, Image, Dimensions, ScrollView, Modal } from 'react-native'
 import React, { Component } from 'react'
 import StackHeader from '../component/StackHeader'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
-import { Picker } from '@react-native-picker/picker';
 import AntDesign from "react-native-vector-icons/AntDesign"
 import CustomResponsiveTable from '../component/CustomResponsiveTable';
+import { connect } from 'react-redux';
 interface props {
 
 }
@@ -15,19 +15,200 @@ interface states {
     tableData: string[];
     sortDate: Date;
     selectedGame: string;
+    month: string;
+    year: string;
+    months: string[];
+    years: string[];
+    modalMonth: boolean;
+    modalYear: boolean;
+    monthName: string;
 }
 
-export default class Result extends Component<props, states> {
+class Result extends Component<props, states> {
     constructor(props: props) {
         super(props);
         this.state = {
-            tableHead: ['DATE', 'GALI', 'GHAZIABAD', 'FARIDABAD', 'DELHI BAZAR', 'SHRI GANESH','CIO GOLD','VIP DIAMOND','TAJ','DISHAWAR'],
-            tableData: [
-              ["4/27/2023", "20", "30","40","50","60","70","80","90","100"],
-            ],
+            tableHead: [],
+            tableData: [],
             sortDate: new Date(),
             selectedGame: '',
+            month: '',
+            year: '2023',
+            months: [
+                {
+                    id: "01",
+                    name: "January",
+                },
+                {
+                    id: "02",
+                    name: "February",
+                },
+                {
+                    id: "03",
+                    name: "March",
+                },
+                {
+                    id: "04",
+                    name: "April",
+                },
+                {
+                    id: "05",
+                    name: "May",
+                },
+                {
+                    id: "06",
+                    name: "June",
+                },
+                {
+                    id: "07",
+                    name: "July",
+                },
+                {
+                    id: "08",
+                    name: "August",
+                },
+                {
+                    id: "09",
+                    name: "September",
+                },
+                {
+                    id: "10",
+                    name: "October",
+                },
+                {
+                    id: "11",
+                    name: "November",
+                },
+                {
+                    id: "12",
+                    name: "December",
+                },
+            ],
+            years: [
+                "1975",
+                "1976",
+                "1977",
+                "1978",
+                "1979",
+                "1980",
+                "1981",
+                "1982",
+                "1983",
+                "1984",
+                "1985",
+                "1986",
+                "1987",
+                "1988",
+                "1989",
+                "1990",
+                "1991",
+                "1992",
+                "1993",
+                "1994",
+                "1995",
+                "1996",
+                "1997",
+                "1998",
+                "1999",
+                "2000",
+                "2001",
+                "2002",
+                "2003",
+                "2004",
+                "2005",
+                "2006",
+                "2007",
+                "2008",
+                "2009",
+                "2010",
+                "2011",
+                "2012",
+                "2013",
+                "2014",
+                "2015",
+                "2016",
+                "2017",
+                "2018",
+                "2019",
+                "2020",
+                "2021",
+                "2022",
+                "2023",
+            ],
+            modalMonth: false,
+            modalYear: false,
+            monthName: ''
         };
+    }
+    componentDidMount(): void {
+        this.allGames();
+        this.allDatas();
+        this.setCurrentMonth()
+    }
+
+    allGames = () => {
+        fetch(this.props.host + 'get-all-games').then((response) => response.json()).then((responseJson) => {
+            if (responseJson.status === 1) {
+                let modifiedAllGames = [];
+                modifiedAllGames.push("date");
+                responseJson.data.map((item, index) => {
+                    modifiedAllGames.push(item.name);
+                });
+                this.setState({ tableHead: modifiedAllGames });
+            }
+        })
+    }
+
+    allDatas = () => {
+        fetch(this.props.host + 'get-my-game-history').then((response) => response.json()).then((responseJson) => {
+            if (responseJson.status === 1) {
+                let modifiedAllGames = [];
+                for (let i = 0; i < responseJson.data.length; i += 2) {
+                    const date = responseJson.data[i];
+                    const games = responseJson.data[i + 1];
+                    const gameNames = games.map(item => item.result);
+
+                    modifiedAllGames.push([date, ...gameNames]);
+                }
+
+                this.setState({ tableData: modifiedAllGames });
+            }
+        })
+    }
+
+    setCurrentMonth = () => {
+        const currentDate = new Date();
+        const monthIndex = currentDate.getMonth();
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        const currentMonthName = monthNames[monthIndex];
+        let modifiedValue = '';
+        if (monthIndex < 10) {
+            modifiedValue = '0' + monthIndex.toString();
+        } else {
+            modifiedValue = monthIndex.toString();
+        }
+        this.setState({ month: modifiedValue, monthName: currentMonthName });
+    }
+
+    search = () => {
+        this.setState({ tableData: [] });
+        fetch(this.props.host + "get-my-game-history?year=" + this.state.year + "&month=" + this.state.month).then((response) => response.json()).then((responseJson) => {
+            if (responseJson.status === 1) {
+                let modifiedAllGames = [];
+                for (let i = 0; i < responseJson.data.length; i += 2) {
+                    const date = responseJson.data[i];
+                    const games = responseJson.data[i + 1];
+                    const gameNames = games.map(item => item.result);
+
+                    modifiedAllGames.push([date, ...gameNames]);
+                }
+
+                this.setState({ tableData: modifiedAllGames });
+            }
+        })
     }
 
     showDatePicker = () => {
@@ -44,26 +225,65 @@ export default class Result extends Component<props, states> {
         return (
             <View style={{ flex: 1, backgroundColor: 'white' }}>
                 <StackHeader title='Result History' navigation={this.props.navigation} />
-                <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height+100, top: 0, left: 0, opacity: 0.2 }} />
+                <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height + 100, top: 0, left: 0, opacity: 0.2 }} />
                 <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}>
                     <Pressable onPress={() => {
-                        this.showDatePicker();
-                    }} style={{ padding: 10, backgroundColor: '#ccc', width: 100, borderRadius: 5, marginRight: 10 }}><Text>{this.state.sortDate.toLocaleDateString()}</Text></Pressable>
+                        this.setState({ modalYear: true });
+                    }} style={{ padding: 10, backgroundColor: '#ccc', width: 100, borderRadius: 5, marginRight: 10 }}><Text>{this.state.year}</Text></Pressable>
                     <Pressable onPress={() => {
-                        this.showDatePicker();
-                    }} style={{ padding: 10, backgroundColor: '#ccc', width: 100, borderRadius: 5, marginRight: 10 }}><Text>Select Game</Text></Pressable>
+                        this.setState({ modalMonth: true });
+                        // this.showDatePicker();
+                    }} style={{ padding: 10, backgroundColor: '#ccc', width: 100, borderRadius: 5, marginRight: 10 }}><Text>{this.state.monthName}</Text></Pressable>
                     <Pressable onPress={() => {
-                        this.showDatePicker();
+                        this.search();
                     }} style={{ padding: 10, backgroundColor: 'blue', width: 40, borderRadius: 5, marginRight: 10 }}><AntDesign name="search1" color="white" size={20} /></Pressable>
 
                 </View>
-                <View style={{ margin: 20 }}>
-                <CustomResponsiveTable tableHead={this.state.tableHead} tableData={this.state.tableData} />
-                </View>
+                <ScrollView style={{ margin: 20 }}>
+                    {this.state.tableData.length > 0 ? <CustomResponsiveTable tableHead={this.state.tableHead} tableData={this.state.tableData} /> : null}
+
+                </ScrollView>
+                <Modal animationType="slide" onRequestClose={() => {
+                    this.setState({ modalYear: false });
+                }} visible={this.state.modalYear}>
+                    <ScrollView contentContainerStyle={{ padding: 20 }}>
+                        <Text style={{ marginLeft: 10, marginBottom: 10, fontSize: 15 }}>Select Year</Text>
+                        {this.state.years.map((item, index) => (<Pressable onPress={() => { this.setState({ year: item, modalYear: false }) }} style={{ width: '95%', margin: 10, backgroundColor: '#fff', elevation: 10, padding: 10, borderRadius: 5 }}><Text key={index}>{item}</Text></Pressable>))}
+
+                    </ScrollView>
+                </Modal>
+                <Modal animationType="slide" onRequestClose={() => {
+                    this.setState({ modalMonth: false });
+                }} visible={this.state.modalMonth}>
+                    <ScrollView contentContainerStyle={{ padding: 20 }}>
+                        <Text style={{ marginLeft: 10, marginBottom: 10, fontSize: 15 }}>Select Month</Text>
+                        {this.state.months.map((item, index) => (<Pressable onPress={() => { this.setState({ month: item.id, monthName: item.name, modalMonth: false }) }} style={{ width: '95%', margin: 10, backgroundColor: '#fff', elevation: 10, padding: 10, borderRadius: 5 }}><Text key={index}>{item.name}</Text></Pressable>))}
+
+                    </ScrollView>
+                </Modal>
             </View>
         )
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        changeAccessToken: (value) => { dispatch({ type: 'CHANGE_TOKEN', token: value }) },
+        changeLogged: (value) => { dispatch({ type: 'LOGIN', logged: value }) },
+        changeUser: (value) => { dispatch({ type: 'CHANGE_USER', user: value }) },
+        changeLoader: (value) => { dispatch({ type: 'CHANGE_LOADER', loader: value }) },
+    };
+
+};
+const mapStateToProps = state => {
+    return {
+        accessToken: state.auth.accessToken,
+        host: state.auth.host,
+        loggedIn: state.auth.loggedIn,
+        user: state.auth.user
+    }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Result);
 
 
 

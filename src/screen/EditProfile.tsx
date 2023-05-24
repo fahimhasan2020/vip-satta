@@ -55,7 +55,7 @@ class EditProfile extends Component {
       console.log(error);
       ToastAndroid.show("Failed to update profile", ToastAndroid.CENTER);
       this.setState({ loading: false });
-    })
+    });
   }
 
   componentDidMount(): void {

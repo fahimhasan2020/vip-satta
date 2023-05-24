@@ -52,16 +52,16 @@ class Home extends Component<HomeProps, HomeState> {
             <Text style={styles.regularFonts}>
               {this.props.user !== null ? this.props.user.first_name + ' ' + this.props.user.last_name : ''}
             </Text>
-            <Text style={styles.regularFonts}>RS.{this.props.user !== null ? this.props.user.balance : ''}</Text>
+            <Text style={styles.regularFonts}>RS. {this.props.user !== null ? Math.ceil(this.props.user.balance).toLocaleString('en-US') : ''}</Text>
             <Text style={styles.regularFonts}>Wallet Balance</Text>
           </View>
           <View style={{ width: '100%', backgroundColor: 'white', alignItems: 'center', height: 150, justifyContent: 'center', overflow: 'hidden', position: 'relative' }}>
             <Lottie source={require('../assets/animation.json')} autoPlay loop style={{ width: '100%' }} />
-            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, alignItems: 'center', justifyContent: 'center', width: '100%', zIndex: 2 }}>
-              <Text style={styles.regularFontsDark}>Taj</Text>
-              <Text style={styles.regularFontsDark}>50</Text>
-              <Text style={styles.regularFontsDark}>3:20 PM</Text>
-            </View>
+            {this.props.todaysGames.length > 0 ? <View style={{ position: 'absolute', top: 0, left: 0, right: 0, alignItems: 'center', justifyContent: 'center', width: '100%', zIndex: 2 }}>
+              <Text style={styles.regularFontsDark}>{this.props.todaysGames[0].name}</Text>
+              <Text style={styles.regularFontsDark}>{this.props.todaysGames[0].shorting_no}</Text>
+              <Text style={styles.regularFontsDark}>{this.props.todaysGames[0].opening_time}</Text>
+            </View> : null}
           </View>
           <View style={{ width: '100%', height: 30 }}>
 

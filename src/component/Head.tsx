@@ -17,7 +17,7 @@ class Head extends Component<props, state>{
         const { navigation } = this.props;
         return (<View style={styles.container}>
             <Pressable onPress={() => { navigation.toggleDrawer(); }} ><Feather name="align-left" size={30} color="#7e07a6" /></Pressable>
-            <Image source={require('../assets/logo.png')} style={{ height: 30, width: 30 }} />
+            <Image source={require('../assets/logoicontr.png')} style={{ height: 50, width: 50 }} />
             <Pressable onPress={() => { navigation.navigate("Support") }} style={{ backgroundColor: '#7e07a6', padding: 6, borderRadius: 6 }}>
                 <MaterialIcons name="support-agent" size={20} color={'#ffffff'} />
             </Pressable>

@@ -75,7 +75,7 @@ class Splash extends Component<AppProps, AppState> {
     return (
       <View style={styles.container}>
         {this.state.bar ? <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} /> : null}
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
+        <Image source={require('../assets/logoicontr.png')} style={styles.logo} />
         <Animated.Text
           style={[styles.text, { transform: [{ translateY: this.state.translateY }] }]}
         >
@@ -99,8 +99,8 @@ const styles = StyleSheet.create({
     fontSize: 35
   },
   logo: {
-    height: 100,
-    width: 100
+    height: 160,
+    width: 160
   }
 });
 

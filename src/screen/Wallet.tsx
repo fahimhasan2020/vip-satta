@@ -3,9 +3,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, StyleSheet, StatusBar, ScrollView, Pressable, Linking, Modal, Dimensions, Platform, ToastAndroid, TextInput, Image } from 'react-native';
 import Head from "../component/Head"
 import AntDesign from "react-native-vector-icons/AntDesign"
-import CustomTable from '../component/CustomTable';
+import CustomDepositTable from '../component/CustomDepositTable';
 import { connect } from "react-redux"
 const uriString = 'upi://pay?pa=ombk.AABL531682jsoa82uxs8@icici&pn=PVM&mc=5499&mode=01&mbkmc=AABL53168';
+const uriString2 = 'upi://pay?pa=upi@id&am=100';
 import { Picker } from '@react-native-picker/picker';
 import { hide } from "react-native-bootsplash"
 import Hr from '../component/Hr';
@@ -44,14 +45,38 @@ class Wallet extends Component<WalletProps, WalletState> {
 
   }
 
-
-
   convertDate = (date: number) => {
     const dateObj = new Date(date);
     return dateObj.toLocaleDateString();
   }
-  componentDidMount = async () => {
+
+  onScreenFocus = () => {
+    this.geBlogData();
+    this.refreshRedux();
+  }
+
+  refreshRedux = async () => {
+    const token = await AsyncStorage.getItem("token");
+    fetch(this.props.host + 'get-user-details', {
+      method: 'GET',
+      headers: {
+        "Access-Token": token
+      }
+    }).then((response) => response.json()).then(async (responseJson) => {
+      console.log(responseJson);
+      this.props.changeUser(responseJson.data);
+    }).catch(error => {
+      ToastAndroid.show("Unable to connect to internet", ToastAndroid.SHORT);
+    });
+  }
+
+  handleModalClose = () => {
+    this.setState({ singlePost: false });
+  }
+
+  geBlogData = async () => {
     this.props.changeLoader(true);
+    this.setState({ history: [], tableData: [] });
     try {
       const token = await AsyncStorage.getItem("token");
       fetch(this.props.host + 'get-user-balance-history', {
@@ -62,6 +87,7 @@ class Wallet extends Component<WalletProps, WalletState> {
           "Access-Token": token
         }
       }).then((response) => response.json()).then(async (responseJson) => {
+        console.log('data transection', responseJson.data)
         await this.setState({ history: responseJson.data });
         const newData = this.state.tableData;
         if (this.state.history.length > 0) {
@@ -77,26 +103,34 @@ class Wallet extends Component<WalletProps, WalletState> {
       this.props.changeLoader(false);
     }
   }
+  componentDidMount = () => {
+    this.geBlogData();
+    this.unsubscribe = this.props.navigation.addListener('focus', this.onScreenFocus);
+  }
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
 
   openUpi = async () => {
     this.setState({ addMoney: true });
-    if (Platform.OS === 'android') {
-      Linking.canOpenURL(uri).then(supported => {
-        if (!supported) {
-          console.log("UPI payment apps are not available on this device");
-          ToastAndroid.show("UPI payment apps are not available on this device", ToastAndroid.SHORT);
-        } else {
-          Linking.openURL(uri);
-        }
-      });
-    } else {
-      Linking.openURL(uri);
-    }
   }
   requestAmount = async () => {
     if (this.state.amount < 50) {
       ToastAndroid.show("You cannot request below 50 rupee", ToastAndroid.SHORT);
     } else {
+      if (Platform.OS === 'android') {
+        Linking.canOpenURL(uri).then(supported => {
+          if (!supported) {
+            console.log(supported);
+            ToastAndroid.show("UPI payment apps are not available on this device", ToastAndroid.SHORT);
+          } else {
+            ToastAndroid.show("Procesing", ToastAndroid.SHORT);
+            Linking.openURL(uri);
+          }
+        });
+      } else {
+        Linking.openURL(uri);
+      }
       const token = await AsyncStorage.getItem("token");
       fetch(this.props.host + 'add-money-request', {
         method: "POST",
@@ -140,7 +174,7 @@ class Wallet extends Component<WalletProps, WalletState> {
         <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("screen").height + 100, top: 0, left: 0, opacity: 0.2 }} />
         <View style={styles.addMoneyContainer}>
           <Text style={{ color: 'white', fontSize: 20, marginBottom: 10 }}>{this.props.user !== null ? this.props.user.first_name + ' ' + this.props.user.last_name : ''}</Text>
-          <Text style={{ color: 'white', fontSize: 26, marginBottom: 10 }}>Rs.{this.props.user !== null ? this.props.user.balance : ''}</Text>
+          <Text style={{ color: 'white', fontSize: 26, marginBottom: 10 }}>Rs.{this.props.user !== null ? Math.ceil(this.props.user.balance).toLocaleString('en-US') : ''}</Text>
           <Text style={{ color: 'white', fontSize: 18, marginBottom: 10 }}>Wallet Balance</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
             <Pressable onPress={async () => { await this.openUpi(); hide() }} style={styles.buttonOutlinedLeft}><AntDesign name="plus" size={10} color="white" /><Text style={styles.buttonText}>ADD MONEY</Text></Pressable>
@@ -149,7 +183,7 @@ class Wallet extends Component<WalletProps, WalletState> {
         </View>
         <Text style={{ color: '#09a3e6', alignSelf: 'center', fontSize: 16 }}>Statement</Text>
         <View style={{ margin: 20 }}>
-          <CustomTable tableHead={this.state.tableHead} tableData={this.state.tableData} />
+          <CustomDepositTable tableHead={this.state.tableHead} tableData={this.state.tableData} />
         </View>
         {/* Modal start */}
 

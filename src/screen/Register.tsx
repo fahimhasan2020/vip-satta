@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, StatusBar, StyleSheet, Image, TouchableOpacity, ScrollView, ToastAndroid, SafeAreaView, KeyboardAvoidingView,Dimensions } from 'react-native';
+import { View, Text, TextInput, Button, StatusBar, StyleSheet, Image, TouchableOpacity, ScrollView, ToastAndroid, SafeAreaView, KeyboardAvoidingView, Dimensions } from 'react-native';
 import { PrimaryInput, PrimaryPassword, PrimaryInputOtp } from "../component/Inputs"
 import { WarningButton } from "../component/Buttons"
 import { MainTitle } from '../component/Title';
@@ -155,9 +155,9 @@ class Register extends Component<Props, State> {
 
 
   render() {
-    return (<SafeAreaView style={{ flex: 1,backgroundColor: '#7e07a6' }}>
-      <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height+100, top: 0, left: 0, opacity: 0.2 }} />
-      <KeyboardAvoidingView style={{ flex: 1,  }} behavior="padding">
+    return (<SafeAreaView style={{ flex: 1, backgroundColor: '#7e07a6' }}>
+      <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height + 100, top: 0, left: 0, opacity: 0.2 }} />
+      <KeyboardAvoidingView style={{ flex: 1, }} behavior="padding">
         <ScrollView contentContainerStyle={styles.container}>
           <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
           <Image source={require('../assets/logo.png')} style={styles.logo} />
@@ -199,9 +199,9 @@ const styles = StyleSheet.create({
     paddingBottom: 400
   },
   logo: {
-    height: 200,
-    width: 200,
-    marginBottom:20
+    height: 300,
+    width: 300,
+    marginBottom: 20
   },
   text: {
     fontSize: 20,

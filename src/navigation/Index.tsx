@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Share, Linking } from 'react-native';
+import { View, Text, StyleSheet, Share, Linking, Image } from 'react-native';
 import { createStackNavigator, TransitionPresets, CardStyleInterpolators } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import Loader from '../component/Loader';
-import { Home, Games, GamesSingle, Login, Register, Support ,Splash, Wallet, GamesHistory, Forget, Profile, EditProfile, HowToPlay, Commision, Result, TransectionHistory, TermsAndConditions } from './Src'
+import { Home, Games, GamesSingle, Login, Register, Support, Splash, Wallet, GamesHistory, Forget, Profile, EditProfile, HowToPlay, Commision, Result, TransectionHistory, TermsAndConditions } from './Src'
 import { connect } from "react-redux"
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
-import IonIcons from "react-native-vector-icons/Ionicons"
 import Entypo from "react-native-vector-icons/Entypo"
-import EvilIcons from "react-native-vector-icons/EvilIcons"
-import FontAwesome from "react-native-vector-icons/FontAwesome"
-import { whatsapp, whatsappMsg } from '../constants/Index';
-
+import CustomDrawerContent from './CustomDrawerComponent';
 import store from "../store/store"
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -22,94 +18,6 @@ const shareWithFriends = async (msg) => {
     message: "Refer your friends and receive 5% commission amount lifetime on every loss bidding (booking) of your friends  user Referral code " + msg.toString() + " https://playvipmember.in/pvm.apk",
   });
 }
-
-const currentState = store.getState();
-
-const logoutAction = {
-  type: 'LOGOUT',
-  payload: {
-    logged: false,
-  },
-};
-
-
-
-
-const CustomDrawerContent = (props) => {
-  return (
-    <DrawerContentScrollView {...props}>
-      {/* Your custom header */}
-      <View style={styles.header}>
-        <EvilIcons name="user" size={120} color={'#fff'} />
-        <Text style={styles.headerText}>
-          {currentState.auth.user !== null ? currentState.auth.user.first_name + ' ' + currentState.auth.user.last_name : ''}
-
-        </Text>
-      </View>
-      {/* Your custom items */}
-      <DrawerItem
-        label="My Profile"
-        labelStyle={{ color: 'white' }}
-        onPress={() => props.navigation.navigate('Profile')}
-        icon={() => <MaterialIcons name="account-box" size={30} color={'#fff'} />}
-      />
-      <DrawerItem
-        label="My PlayGame"
-        labelStyle={{ color: 'white' }}
-        onPress={() => props.navigation.navigate('GamesHistory')}
-        icon={() => <MaterialIcons name="videogame-asset" size={30} color={'#fff'} />}
-      />
-      <DrawerItem
-        label="Commision"
-        labelStyle={{ color: 'white' }}
-        onPress={() => props.navigation.navigate('Commision')}
-        icon={() => <MaterialIcons name="room-preferences" size={30} color={'#fff'} />}
-      />
-      <DrawerItem
-        label="How to Play"
-        labelStyle={{ color: 'white' }}
-        onPress={() => props.navigation.navigate('HowToPlay')}
-        icon={() => <MaterialIcons name="info" size={30} color={'#fff'} />}
-      />
-      <DrawerItem
-        label="Result History"
-        labelStyle={{ color: 'white' }}
-        onPress={() => props.navigation.navigate('Result')}
-        icon={() => <MaterialIcons name="history" size={30} color={'#fff'} />}
-      />
-      <DrawerItem
-        label="Add/Withdrow List"
-        labelStyle={{ color: 'white' }}
-        onPress={() => props.navigation.navigate('TransectionHistory')}
-        icon={() => <MaterialIcons name="add" size={30} color={'#fff'} />}
-      />
-      <DrawerItem
-        label="Help"
-        labelStyle={{ color: 'white' }}
-        onPress={() => Linking.openURL(`whatsapp://send?phone=${whatsapp}&text=${whatsappMsg}`)}
-        icon={() => <FontAwesome name="whatsapp" size={30} color={'#fff'} />}
-      />
-      <DrawerItem
-        label="Share & Earn"
-        labelStyle={{ color: 'white' }}
-        onPress={() => shareWithFriends(currentState.auth.user.account_id)}
-        icon={() => <MaterialIcons name="share" size={30} color={'#fff'} />}
-      />
-      <DrawerItem
-        label="Terms & Condition"
-        labelStyle={{ color: 'white' }}
-        onPress={() => props.navigation.navigate('TermsAndConditions')}
-        icon={() => <MaterialIcons name="file-copy" size={30} color={'#fff'} />}
-      />
-      <DrawerItem
-        label="Logout"
-        labelStyle={{ color: 'white' }}
-        onPress={() => store.dispatch(logoutAction)}
-        icon={() => <MaterialIcons name="logout" size={30} color={'#fff'} />}
-      />
-    </DrawerContentScrollView>
-  );
-};
 const Tab = createBottomTabNavigator();
 
 function NonUserStack() {
@@ -221,10 +129,10 @@ interface State {
 
 }
 
-function HomeDrawer() {
+function HomeDrawer({ user }) {
   return (
     <Drawer.Navigator
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      drawerContent={(props) => <CustomDrawerContent user={user} navigation={props.navigation} />}
       screenOptions={{
         headerShown: false,
         drawerContentContainerStyle: { backgroundColor: '#7e07a6' },
@@ -272,8 +180,8 @@ class Index extends Component<Props, State>{
   render() {
     return (
       <NavigationContainer>
-        {!this.props.loggedIn ? <NonUserStack /> : <HomeDrawer />}
-        {this.props.loader?<Loader />:null}
+        {!this.props.loggedIn ? <NonUserStack /> : <HomeDrawer user={this.props.user} />}
+        {this.props.loader ? <Loader /> : null}
       </NavigationContainer>
     );
   }
@@ -295,7 +203,8 @@ const mapStateToProps = state => {
     host: state.auth.host,
     loggedIn: state.auth.loggedIn,
     preference: state.auth.preference,
-    loader:state.auth.loader
+    loader: state.auth.loader,
+    user: state.auth.user
   }
 };
 
@@ -304,15 +213,16 @@ export default connect(mapStateToProps, mapDispatchToProps)(Index);
 
 const styles = StyleSheet.create({
   header: {
-    height: 150,
+    height: 280,
     backgroundColor: '#7e07a6',
     justifyContent: 'center',
     alignItems: 'center',
   },
   headerText: {
-    fontSize: 24,
+    fontSize: 14,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#ccc',
+    zIndex: 10, marginTop: 210
   },
   drawerStyle: {
     backgroundColor: '#7e07a6',

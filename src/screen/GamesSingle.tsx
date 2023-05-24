@@ -33,6 +33,8 @@ class GamesSingle extends Component<GamesSingleProps, GamesSingleState> {
     };
   }
 
+  options = {};
+
   componentDidMount = () => {
     const sum = this.state.inputData.reduce((acc, val) => {
       return acc + (val ? parseInt(val) : 0);
@@ -56,47 +58,63 @@ class GamesSingle extends Component<GamesSingleProps, GamesSingleState> {
       let typeArray = '';
       const token = await AsyncStorage.getItem("token");
       const today = new Date();
-      console.log(today.toLocaleDateString());
       await this.state.inputData.map((sata, im) => {
         if (sata !== '') {
-          if(im<10){
+          if (im < 9) {
             let currentIndex = im + 1;
-            digitArray = digitArray +'0'+currentIndex.toString() + ',';
+            digitArray = digitArray + '0' + currentIndex.toString() + ',';
             amountArray = amountArray + sata.toString() + ','
             typeArray = typeArray + 'number,';
-          }else{
-          let currentIndex = im + 1;
-          digitArray = digitArray + currentIndex.toString() + ',';
-          amountArray = amountArray + sata.toString() + ','
-          typeArray = typeArray + 'number,';
+          } else {
+            let currentIndex = im + 1;
+            if (currentIndex === 100) {
+              digitArray = digitArray + '00,';
+            } else {
+              digitArray = digitArray + currentIndex.toString() + ',';
+
+            }
+            amountArray = amountArray + sata.toString() + ',';
+            typeArray = typeArray + 'number,';
           }
         }
       });
 
       await this.state.inputDataA.map((satta, index) => {
         if (satta !== '') {
-          
-            let currentIndexa = index + 1;
+
+          let currentIndexa = index + 1;
+          if (currentIndexa === 10) {
+            digitArray = digitArray + '0,';
+          } else {
             digitArray = digitArray + currentIndexa.toString() + ',';
-            amountArray = amountArray + satta.toString() + ','
-            typeArray = typeArray + 'andar,';
-          
+          }
+
+          amountArray = amountArray + satta.toString() + ','
+          typeArray = typeArray + 'andar,';
+
         }
       });
       await this.state.inputDataB.map((sattas, i) => {
         if (sattas !== '') {
           let currentIndexi = i + 1;
-          digitArray = digitArray + currentIndexi.toString() + ',';
+          if (currentIndexi === 10) {
+            digitArray = digitArray + '0,';
+          } else {
+            digitArray = digitArray + currentIndexi.toString() + ',';
+          }
           amountArray = amountArray + sattas.toString() + ','
           typeArray = typeArray + 'bahar,';
         }
       });
-
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const year = today.getFullYear();
+      const formattedDate = `${day}-${month}-${year}`;
       digitArray = digitArray.slice(0, -1);
       amountArray = amountArray.slice(0, -1);
       typeArray = typeArray.slice(0, -1);
-      console.log('digit:', digitArray, 'amount:', amountArray, 'type:', typeArray);
 
+      console.log('daTE:', formattedDate);
       fetch(this.props.host + 'play-game', {
         method: "POST",
         headers: {
@@ -105,19 +123,21 @@ class GamesSingle extends Component<GamesSingleProps, GamesSingleState> {
           "Access-Token": token
         },
         body: JSON.stringify({
-          "type": typeArray,
-          date: today.toLocaleDateString(),
+          type: typeArray,
+          date: formattedDate,
           game_id: this.props.route.params.id,
-          "digit": digitArray,
-          "amount": amountArray
+          digit: digitArray,
+          amount: amountArray
         })
-      }).then((response)=>response.json()).then((responseJson)=>{
+      }).then((response) => response.json()).then((responseJson) => {
         console.log(responseJson);
-        if(responseJson.status === 1){
-           fetch(this.props.host + 'get-user-details', {
+        if (responseJson.status === 1) {
+          fetch(this.props.host + 'get-user-details', {
             method: 'GET',
             headers: {
-              "Access-Token": token
+              "Access-Token": token,
+              "Content-type": "application/json",
+              "Accept": "application/json",
             }
           }).then((response) => response.json()).then(async (responseJson) => {
             console.log(responseJson);
@@ -129,7 +149,7 @@ class GamesSingle extends Component<GamesSingleProps, GamesSingleState> {
             console.log(error);
             ToastAndroid.show("Unable to connect to internet", ToastAndroid.SHORT);
           });
-        }else{
+        } else {
           this.props.changeLoading(false);
           ToastAndroid.show("Unable to connect to internet", ToastAndroid.SHORT);
         }
@@ -139,11 +159,32 @@ class GamesSingle extends Component<GamesSingleProps, GamesSingleState> {
         ToastAndroid.show("Unable to connect to internet", ToastAndroid.SHORT);
       })
 
-      
+
 
 
     }
 
+    // var myHeaders = new Headers();
+    // myHeaders.append("Access-Token", "dw0yvpZT6kmnsWxKLnSRSm6ZV1BnGLpGOcvlxaUhIRWVLWbLFfqpxcxNgr35");
+
+    // var formdata = new FormData();
+    // formdata.append("date", "22-05-2023");
+    // formdata.append("game_id", "15");
+    // formdata.append("digit", "02");
+    // formdata.append("amount", "103");
+    // formdata.append("type", "number");
+
+    // var requestOptions = {
+    //   method: 'POST',
+    //   headers: myHeaders,
+    //   body: formdata,
+    //   redirect: 'follow'
+    // };
+
+    // fetch("https://vipsatta.orfactor.com/api/v1/play-game", requestOptions)
+    //   .then(response => response.text())
+    //   .then(result => console.log(result))
+    //   .catch(error => console.log('error', error));
   }
 
   changePress = (value) => {

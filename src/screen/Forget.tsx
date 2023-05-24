@@ -201,8 +201,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#7e07a6'
   },
   logo: {
-    height: 200,
-    width: 200,
+    height: 300,
+    width: 300,
     marginBottom: 20
   },
   text: {
