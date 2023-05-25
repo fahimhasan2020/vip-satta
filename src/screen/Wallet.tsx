@@ -5,12 +5,12 @@ import Head from "../component/Head"
 import AntDesign from "react-native-vector-icons/AntDesign"
 import CustomDepositTable from '../component/CustomDepositTable';
 import { connect } from "react-redux"
-const uriString = 'upi://pay?pa=ombk.AABL531682jsoa82uxs8@icici&pn=PVM&mc=5499&mode=01&mbkmc=AABL53168';
+const uriString = 'upi://pay?pa=fcbiz96ofbb@freecharge&pn=telecom&mc=5411&cu=INR&tid=1234567890&am=';
 const uriString2 = 'upi://pay?pa=upi@id&am=100';
 import { Picker } from '@react-native-picker/picker';
 import { hide } from "react-native-bootsplash"
 import Hr from '../component/Hr';
-const uri = encodeURI(uriString);
+
 
 interface WalletProps {
 
@@ -115,37 +115,39 @@ class Wallet extends Component<WalletProps, WalletState> {
     this.setState({ addMoney: true });
   }
   requestAmount = async () => {
+    const uri = encodeURI(uriString + this.state.amount);
+
     if (this.state.amount < 50) {
-      ToastAndroid.show("You cannot request below 50 rupee", ToastAndroid.SHORT);
+      ToastAndroid.show("You cannot request below 50 rupees", ToastAndroid.SHORT);
     } else {
       if (Platform.OS === 'android') {
-        Linking.canOpenURL(uri).then(supported => {
+        Linking.canOpenURL(uri).then(async(supported) => {
           if (!supported) {
             console.log(supported);
             ToastAndroid.show("UPI payment apps are not available on this device", ToastAndroid.SHORT);
           } else {
-            ToastAndroid.show("Procesing", ToastAndroid.SHORT);
+            ToastAndroid.show("Processing", ToastAndroid.SHORT);
             Linking.openURL(uri);
+            const token = await AsyncStorage.getItem("token");
+            fetch(this.props.host + 'add-money-request', {
+                  method: "POST",
+                  headers: {
+                      "Content-type": "application/json",
+                       "Accept": "application/json",
+                        "Access-Token": token
+                      },
+                        body: JSON.stringify({ amount: this.state.amount })
+                      }).then((response) => response.json()).then((responseJson) => {
+                          //ToastAndroid.show(responseJson.data, ToastAndroid.SHORT);
+                      });
           }
         });
       } else {
         Linking.openURL(uri);
       }
-      const token = await AsyncStorage.getItem("token");
-      fetch(this.props.host + 'add-money-request', {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          "Accept": "application/json",
-          "Access-Token": token
-        },
-        body: JSON.stringify({ amount: this.state.amount })
-      }).then((response) => response.json()).then((responseJson) => {
-        ToastAndroid.show(responseJson.data, ToastAndroid.SHORT);
-      });
     }
-
   }
+
 
   requestWithdrowAmount = async () => {
     console.log('Initiated');
