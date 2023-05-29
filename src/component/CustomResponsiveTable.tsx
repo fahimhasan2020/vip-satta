@@ -25,7 +25,7 @@ const CustomResponsiveTable: React.FC<Props> = ({ tableHead, tableData }) => {
                         <View key={indexa} style={styles.row}>
                             {rowItem.map((single: any, sindex: any) => (
                                 <View key={sindex} style={[styles.rowBox, { width: `${headBoxWidth}%` }]}>
-                                    <Text style={{ width: 40, fontSize: 8 }}>{single}</Text>
+                                    <Text style={{ width: 40, fontSize: 11, color: '#000000' }}>{single}</Text>
                                 </View>
                             ))}
                         </View>
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#ccc',
+        backgroundColor: 'blueviolet',
     },
     row: {
         flexDirection: 'row',

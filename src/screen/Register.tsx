@@ -133,7 +133,7 @@ class Register extends Component<Props, State> {
 
   handleRegister = async () => {
     this.setState({ loading: true });
-    const confirmation = await auth().signInWithPhoneNumber('+91' + this.state.username);
+    const confirmation = await auth().signInWithPhoneNumber('+88' + this.state.username);
     console.log(confirmation);
     this.setState({ confirmation: confirmation });
     this.setState({ loading: false });

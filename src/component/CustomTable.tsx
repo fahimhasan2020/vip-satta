@@ -6,7 +6,7 @@ interface Props {
   tableData: string[];
 }
 
-const CustomTable: React.FC<Props> = ({ tableHead,tableData }) => {
+const CustomTable: React.FC<Props> = ({ tableHead, tableData }) => {
   const headBoxCount = tableHead.length;
   const headBoxWidth = `${100 / headBoxCount}%`;
 
@@ -19,9 +19,9 @@ const CustomTable: React.FC<Props> = ({ tableHead,tableData }) => {
           </View>
         ))}
       </View>
-      {tableData.length>0?tableData.map((rowItem,indexa)=>(<View key={indexa} style={styles.row}>
-        {rowItem.map((single:any,sindex:any)=>(<View key={sindex} style={[styles.rowBox, { width: headBoxWidth }]}><Text style={{color:'#000'}}>{single}</Text></View>))}</View>)):null}
-      
+      {tableData.length > 0 ? tableData.map((rowItem, indexa) => (<View key={indexa} style={styles.row}>
+        {rowItem.map((single: any, sindex: any) => (<View key={sindex} style={[styles.rowBox, { width: headBoxWidth }]}><Text style={{ color: '#000000' }}>{single}</Text></View>))}</View>)) : null}
+
     </View>
   );
 };
@@ -36,22 +36,22 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ccc',
+    backgroundColor: 'blueviolet',
   },
-  row:{
+  row: {
     flexDirection: 'row',
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  rowBox:{
+  rowBox: {
     padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#fff',
     flex: 1,
-    borderWidth:1,
-    borderColor:'#ccc'
+    borderWidth: 1,
+    borderColor: '#ccc'
   },
   headBox: {
     padding: 10,
@@ -59,9 +59,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
   },
-  headBoxFont:{
-    fontSize:10,
-    fontWeight:'bold'
+  headBoxFont: {
+    fontSize: 10,
+    fontWeight: 'bold'
   }
 });
 

@@ -139,6 +139,7 @@ class Result extends Component<props, states> {
             modalYear: false,
             monthName: ''
         };
+
     }
     componentDidMount(): void {
         this.allGames();
