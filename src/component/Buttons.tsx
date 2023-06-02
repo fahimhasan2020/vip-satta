@@ -30,7 +30,7 @@ export const WarningButton: React.FC<Props> = ({ label = 'Hi', onPress, loading 
   return (
     <View>
       <TouchableHighlight onPress={onPress} >
-        <LinearGradient colors={['#f4fc03', '#fccf03', '#fc9003']} style={styles.warning}>
+        <LinearGradient colors={['#ff5733', '#c73c1e', '#a3290f']} style={styles.warning}>
           {loading ? <ActivityIndicator size={'small'} color={'white'} /> : <Text style={styles.textWhite}>{label}</Text>}
         </LinearGradient>
       </TouchableHighlight>

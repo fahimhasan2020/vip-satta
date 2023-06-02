@@ -90,13 +90,7 @@ class Profile extends Component {
               </View>
               <Text style={styles.labels}>{this.props.user !== null ? this.props.user.phone : ''}</Text>
             </View>
-            <View style={styles.viewSingle}>
-              <View style={styles.labelSection}>
-                <MaterialIcons name="location-city" size={25} color={'#06b795'} />
-                <Text style={styles.label}>City</Text>
-              </View>
-              <Text style={styles.labels}></Text>
-            </View>
+
           </View>
         </View>
         <Pressable onPress={() => { this.setState({ modalVisible: true }) }} style={styles.button}><MaterialIcons name="vpn-key" size={20} color={'#fff'} /><Text style={styles.buttonText}>CHANGE PASSWORD</Text></Pressable>
@@ -158,7 +152,6 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#35b4e7',
-    margin: 10,
     padding: 10,
     paddingLeft: 20,
     paddingRight: 20,
@@ -167,7 +160,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 5,
     elevation: 10,
-    marginBottom: 20
+    marginBottom: 5,
+    marginLeft: 10,
+    marginRight: 10
   },
   container: {
     flex: 1,

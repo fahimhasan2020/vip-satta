@@ -105,7 +105,6 @@ class Wallet extends Component<WalletProps, WalletState> {
     }
   }
   componentDidMount = () => {
-    this.geBlogData();
     this.unsubscribe = this.props.navigation.addListener('focus', this.onScreenFocus);
   }
   componentWillUnmount() {
@@ -117,7 +116,7 @@ class Wallet extends Component<WalletProps, WalletState> {
   }
   requestAmount = async () => {
     const uriString = 'upi://pay?pa='+this.props.preference.data[4].upi_id+'&pn=vipsatta&cu=INR&am='+this.state.amount;
-    const uri = encodeURI(uriString + this.state.amount);
+    const uri = encodeURI(uriString);
 
     if (parseInt(this.state.amount) < 50) {
       ToastAndroid.show("You cannot request below 50 rupees", ToastAndroid.SHORT);

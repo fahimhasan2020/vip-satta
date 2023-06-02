@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, StatusBar, StyleSheet, Image, TouchableOpacity, ToastAndroid, Pressable, SafeAreaView, KeyboardAvoidingView, ScrollView, Dimensions } from 'react-native';
+import { View, Text, TextInput, Button, StatusBar, StyleSheet, Image, TouchableOpacity, ToastAndroid, Pressable, SafeAreaView, KeyboardAvoidingView, ScrollView, Dimensions, Animated } from 'react-native';
 import { PrimaryInput, PrimaryPassword } from "../component/Inputs"
 import { PrimaryButton, WarningButton } from "../component/Buttons"
 import { MainTitle } from '../component/Title';
@@ -26,12 +26,31 @@ class Login extends Component<Props, State> {
       username: '',
       password: '',
       loading: false,
-      remember: false
+      remember: false,
     };
     this.setDataUsername = this.setDataUsername.bind(this);
     this.setDataPassword = this.setDataPassword.bind(this);
   }
 
+  componentDidMount() {
+    // this.props.navigation.addListener('focus', this.handleScreenFocus);
+    // this.props.navigation.addListener('blur', this.handleScreenBlur);
+  }
+
+  componentWillUnmount() {
+    // this.props.navigation.removeListener('focus', this.handleScreenFocus);
+    // this.props.navigation.removeListener('blur', this.handleScreenBlur);
+  }
+
+  handleScreenFocus = () => {
+    console.log('this component is now live');
+
+  };
+
+  handleScreenBlur = () => {
+    console.log('this component is leaving');
+
+  };
 
   login = async () => {
     this.setState({ loading: true })
@@ -72,7 +91,6 @@ class Login extends Component<Props, State> {
 
   configureNotification = () => {
     PushNotification.configure({
-      // (optional) Called when Token is generated (iOS and Android)
       onRegister: async (token) => {
         const act = await AsyncStorage.getItem("token");
         console.log("TOKEN:", act);
@@ -93,49 +111,24 @@ class Login extends Component<Props, State> {
           .then(result => console.log(result))
           .catch(error => console.log('error', error));
       },
-
-      // (required) Called when a remote is received or opened, or local notification is opened
       onNotification: function (notification) {
         console.log("NOTIFICATION:", notification);
-
-        // process the notification
-
-        // (required) Called when a remote is received or opened, or local notification is opened
         notification.finish(PushNotificationIOS.FetchResult.NoData);
       },
-
-      // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
       onAction: function (notification) {
         console.log("ACTION:", notification.action);
         console.log("NOTIFICATION:", notification);
-
-        // process the action
       },
-
-      // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
       onRegistrationError: function (err) {
         console.error(err.message, err);
       },
-
-      // IOS ONLY (optional): default: all - Permissions to register.
       permissions: {
         alert: true,
         badge: true,
         sound: true,
       },
-
-      // Should the initial notification be popped automatically
-      // default: true
       popInitialNotification: true,
       foreground: true,
-
-      /**
-       * (optional) default: true
-       * - Specified if permissions (ios) and token (android and ios) will requested or not,
-       * - if not, you must call PushNotificationsHandler.requestPermissions() later
-       * - if you are not using remote notification or do not have Firebase installed, use this:
-       *     requestPermissions: Platform.OS === 'ios'
-       */
       requestPermissions: true,
     });
   }
@@ -171,18 +164,18 @@ class Login extends Component<Props, State> {
             <Pressable onPress={() => { this.props.navigation.navigate('Forget') }}><Text style={{ color: 'white', marginTop: 6 }}>Forget password?</Text></Pressable>
           </View>
           <WarningButton onPress={() => { this.login() }} loading={this.state.loading} label={"SIGN IN"} />
-
+          <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'center', zIndex: 10, marginTop: 40 }}>
+            <Text style={{ margin: 0, padding: 0, color: 'white' }}>Don't have any account? </Text><TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('Register');
+              }}
+              style={{ margin: 0, padding: 0 }}><Text style={{ color: 'orange', fontWeight: 'bold', padding: 0 }}>Register</Text></TouchableOpacity>
+          </View>
 
         </View>
       </KeyboardAvoidingView></ScrollView>
 
-      <View style={{ flexDirection: 'row', position: 'absolute', bottom: 20, width: '100%', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
-        <Text style={{ margin: 0, padding: 0, color: 'white' }}>Don't have any account? </Text><TouchableOpacity
-          onPress={() => {
-            this.props.navigation.navigate('Register');
-          }}
-          style={{ margin: 0, padding: 0 }}><Text style={{ color: 'orange', fontWeight: 'bold', padding: 0 }}>Register</Text></TouchableOpacity>
-      </View>
+
 
     </SafeAreaView>
     );
@@ -197,8 +190,8 @@ const styles = StyleSheet.create({
     zIndex: 2
   },
   logo: {
-    height: 300,
-    width: 300,
+    height: 180,
+    width: 180,
     marginBottom: 20
   },
   text: {

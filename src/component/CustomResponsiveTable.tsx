@@ -10,6 +10,7 @@ const CustomResponsiveTable: React.FC<Props> = ({ tableHead, tableData }) => {
     const headBoxCount = tableHead.length;
     const headBoxWidth = 100 / headBoxCount;
 
+
     return (
         <ScrollView showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrolls} horizontal={true}>
             <View style={styles.container}>
@@ -20,12 +21,13 @@ const CustomResponsiveTable: React.FC<Props> = ({ tableHead, tableData }) => {
                         </View>
                     ))}
                 </View>
+
                 {tableData.length > 0
                     ? tableData.map((rowItem, indexa) => (
                         <View key={indexa} style={styles.row}>
                             {rowItem.map((single: any, sindex: any) => (
                                 <View key={sindex} style={[styles.rowBox, { width: `${headBoxWidth}%` }]}>
-                                    <Text style={{ width: 40, fontSize: 11, color: '#000000' }}>{single}</Text>
+                                    <Text style={{ width: 40, fontSize: 14, color: '#000000' }}>{single}</Text>
                                 </View>
                             ))}
                         </View>
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
 
     },
     headBoxFont: {
-        fontSize: 10,
+        fontSize: 14,
         fontWeight: 'bold',
     },
 });

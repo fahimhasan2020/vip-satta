@@ -17,22 +17,21 @@ const CustomDepositTable: React.FC<Props> = ({ tableHead, tableData }) => {
     const headBoxCount = tableHead.length;
     const headBoxWidth = `${100 / headBoxCount}%`;
     let colorPallete = 'green';
-    return (
-        <View style={styles.container}>
-            <View style={styles.head}>
-                {tableHead.map((headItem, index) => (
-                    <View key={index} style={[styles.headBox, { width: headBoxWidth }]}>
-                        <Text style={styles.headBoxFont}>{headItem}</Text>
-                    </View>
-                ))}
-            </View>
-            {tableData.length > 0 ? tableData.map((rowItem, indexa) => (<View key={indexa} style={styles.row}>
-                {colorPallete = rowItem[1] === 'Deposit' || rowItem[1] === 'Recharge' || rowItem[1] === 'Win a game' || rowItem[1] === 'Game commission' || rowItem[1] === 'Signup commission'? rowItem.map((single: any, sindex: any) => (<View key={sindex} style={[styles.rowBox, { width: headBoxWidth }]}><Text style={{ color: 'green' }}> {sindex === 2?'+'+single:single}  
-                </Text></View>)) : rowItem.map((single: any, sindex: any) => (<View key={sindex} style={[styles.rowBox, { width: headBoxWidth }]}><Text style={{ color: 'red' }}> {sindex === 2?'-'+single:single} 
-                </Text></View>))}
-                </View>)) : null}
-
+    return (<View style={styles.container}>
+        <View style={styles.head}>
+            {tableHead.map((headItem, index) => (
+                <View key={index} style={[styles.headBox, { width: headBoxWidth }]}>
+                    <Text style={styles.headBoxFont}>{headItem}</Text>
+                </View>
+            ))}
         </View>
+        {tableData.length > 0 ? tableData.map((rowItem, indexa) => (<View key={indexa} style={styles.row}>
+            {colorPallete = rowItem[1] === 'Deposit' || rowItem[1] === 'Recharge' || rowItem[1] === 'Win a game' || rowItem[1] === 'Game commission' || rowItem[1] === 'Signup commission' ? rowItem.map((single: any, sindex: any) => (<View key={sindex} style={[styles.rowBox, { width: headBoxWidth }]}><Text style={{ color: 'green' }}> {sindex === 2 ? '+' + single : single}
+            </Text></View>)) : rowItem.map((single: any, sindex: any) => (<View key={sindex} style={[styles.rowBox, { width: headBoxWidth }]}><Text style={{ color: 'red' }}> {sindex === 2 ? '-' + single : single}
+            </Text></View>))}
+        </View>)) : null}
+
+    </View>
     );
 };
 
@@ -46,7 +45,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#ccc',
+        backgroundColor: 'blueviolet',
     },
     row: {
         flexDirection: 'row',
@@ -71,7 +70,8 @@ const styles = StyleSheet.create({
     },
     headBoxFont: {
         fontSize: 10,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: 'white'
     }
 });
 

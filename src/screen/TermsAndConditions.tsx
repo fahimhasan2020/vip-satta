@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, ScrollView, StatusBar,Image,Dimensions } from 'react-native'
+import { Text, StyleSheet, View, ScrollView, StatusBar, Image, Dimensions } from 'react-native'
 import React, { Component } from 'react'
 import { connect } from "react-redux"
 import StackHeader from '../component/StackHeader'
@@ -7,10 +7,10 @@ class TermsAndConditions extends Component {
   render() {
     return (
       <ScrollView contentContainerStyle={styles.containers}>
-        <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("screen").height+100, top: 0, left: 0, opacity: 0.2 }} />
+        <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("screen").height + 100, top: 0, left: 0, opacity: 0.2 }} />
         <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
         <StackHeader navigation={this.props.navigation} title={'Terms & Conditions'} />
-        <Text style={{ textAlign: 'center', padding: 20 }}>{this.props.preference.data[11].terms}</Text>
+        <Text style={{ textAlign: 'center', padding: 20, fontWeight: 'bold', fontSize: 15, color: '#000' }}>{this.props.preference.data[11].terms}</Text>
       </ScrollView>
     )
   }

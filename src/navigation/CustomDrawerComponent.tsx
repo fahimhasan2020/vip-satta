@@ -1,8 +1,10 @@
-import { View, Text, StyleSheet, Share, Linking, Image } from 'react-native';
+import { View, Text, StyleSheet, Share, Linking, Image, TouchableOpacity } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
+import Entypo from "react-native-vector-icons/Entypo"
 import { whatsapp, whatsappMsg } from '../constants/Index';
+import { useState, useEffect } from "react"
 import store from "../store/store"
 const shareWithFriends = async (msg) => {
   const result = await Share.share({
@@ -17,6 +19,7 @@ const logoutAction = {
   },
 };
 const CustomDrawerContent = ({ user, navigation }) => {
+  const [socialClosed, setSocialClosed] = useState(false);
   return (
     <DrawerContentScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
@@ -63,12 +66,55 @@ const CustomDrawerContent = ({ user, navigation }) => {
         onPress={() => navigation.navigate('TransectionHistory')}
         icon={() => <MaterialIcons name="add" size={30} color={'#fff'} />}
       />
-      <DrawerItem
-        label="Help"
-        labelStyle={{ color: 'white' }}
-        onPress={() => Linking.openURL(`whatsapp://send?phone=${whatsapp}&text=${whatsappMsg}`)}
-        icon={() => <FontAwesome name="whatsapp" size={30} color={'#fff'} />}
-      />
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <DrawerItem
+          style={{ width: 200 }}
+          label="Help"
+          labelStyle={{ color: 'white' }}
+          onPress={() => {
+            if (socialClosed) {
+              setSocialClosed(false);
+            } else {
+              setSocialClosed(true);
+            }
+
+          }}
+          icon={() => <Entypo name="help" size={30} color={'#fff'} />}
+        />
+        {socialClosed ? <TouchableOpacity onPress={() => { setSocialClosed(false) }}><MaterialIcons name="remove" size={30} color={'#fff'} /></TouchableOpacity> : <TouchableOpacity onPress={() => { setSocialClosed(true) }}><MaterialIcons name="add" size={30} color={'#fff'} /></TouchableOpacity>}
+
+      </View>
+
+      {socialClosed ? <View style={{ paddingLeft: 20 }}>
+        <DrawerItem
+          label="WhatsApp"
+          labelStyle={{ color: 'white' }}
+          onPress={() => Linking.openURL(`whatsapp://send?phone=${whatsapp}&text=${whatsappMsg}`)}
+          icon={() => <FontAwesome name="whatsapp" size={30} color={'#fff'} />}
+        />
+        <DrawerItem
+          label="Youtube"
+          labelStyle={{ color: 'white' }}
+          onPress={() => Linking.openURL(`https://youtube.com`)}
+          icon={() => <FontAwesome name="youtube" size={30} color={'#fff'} />}
+        />
+        <DrawerItem
+          label="Telegram"
+          labelStyle={{ color: 'white' }}
+          onPress={() => Linking.openURL(`https://t.me/8801979585912
+          `)}
+          icon={() => <FontAwesome name="telegram" size={30} color={'#fff'} />}
+
+        />
+        <DrawerItem
+          label="Skype"
+          labelStyle={{ color: 'white' }}
+          onPress={() => Linking.openURL(`http://skype.com`)}
+          icon={() => <FontAwesome name="skype" size={30} color={'#fff'} />}
+        />
+      </View> : null}
+
+
       <DrawerItem
         label="Share & Earn"
         labelStyle={{ color: 'white' }}

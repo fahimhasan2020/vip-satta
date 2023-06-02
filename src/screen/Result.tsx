@@ -230,14 +230,14 @@ class Result extends Component<props, states> {
                 <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}>
                     <Pressable onPress={() => {
                         this.setState({ modalYear: true });
-                    }} style={{ padding: 10, backgroundColor: '#ccc', width: 100, borderRadius: 5, marginRight: 10 }}><Text>{this.state.year}</Text></Pressable>
+                    }} style={{ padding: 10, backgroundColor: 'blueviolet', width: 100, borderRadius: 5, marginRight: 10 }}><Text style={{color:'#fff'}}>{this.state.year}</Text></Pressable>
                     <Pressable onPress={() => {
                         this.setState({ modalMonth: true });
                         // this.showDatePicker();
-                    }} style={{ padding: 10, backgroundColor: '#ccc', width: 100, borderRadius: 5, marginRight: 10 }}><Text>{this.state.monthName}</Text></Pressable>
+                    }} style={{ padding: 10, backgroundColor: 'blueviolet', width: 100, borderRadius: 5, marginRight: 10 }}><Text style={{color:'#fff'}}>{this.state.monthName}</Text></Pressable>
                     <Pressable onPress={() => {
                         this.search();
-                    }} style={{ padding: 10, backgroundColor: 'blue', width: 40, borderRadius: 5, marginRight: 10 }}><AntDesign name="search1" color="white" size={20} /></Pressable>
+                    }} style={{ padding: 10, backgroundColor: 'blueviolet', width: 40, borderRadius: 5, marginRight: 10 }}><AntDesign name="search1" color="white" size={20} /></Pressable>
 
                 </View>
                 <ScrollView style={{ margin: 20 }}>
@@ -248,8 +248,9 @@ class Result extends Component<props, states> {
                     this.setState({ modalYear: false });
                 }} visible={this.state.modalYear}>
                     <ScrollView contentContainerStyle={{ padding: 20 }}>
-                        <Text style={{ marginLeft: 10, marginBottom: 10, fontSize: 15 }}>Select Year</Text>
-                        {this.state.years.map((item, index) => (<Pressable onPress={() => { this.setState({ year: item, modalYear: false }) }} style={{ width: '95%', margin: 10, backgroundColor: '#fff', elevation: 10, padding: 10, borderRadius: 5 }}><Text key={index}>{item}</Text></Pressable>))}
+                        <Text style={{ marginLeft: 10, marginBottom: 10, fontSize: 15 ,color:'#000'}}>Select Year</Text>
+                        {this.state.years.map((item, index) => (<Pressable onPress={() => { this.setState({ year: item, modalYear: false }) }} style={{ width: '95%', margin: 10, backgroundColor: '#fff', elevation: 10, padding: 10, borderRadius: 5}}><Text style={{color:'#000'}} key={index}>{item}</Text></Pressable>))}
+
 
                     </ScrollView>
                 </Modal>
@@ -257,8 +258,8 @@ class Result extends Component<props, states> {
                     this.setState({ modalMonth: false });
                 }} visible={this.state.modalMonth}>
                     <ScrollView contentContainerStyle={{ padding: 20 }}>
-                        <Text style={{ marginLeft: 10, marginBottom: 10, fontSize: 15 }}>Select Month</Text>
-                        {this.state.months.map((item, index) => (<Pressable onPress={() => { this.setState({ month: item.id, monthName: item.name, modalMonth: false }) }} style={{ width: '95%', margin: 10, backgroundColor: '#fff', elevation: 10, padding: 10, borderRadius: 5 }}><Text key={index}>{item.name}</Text></Pressable>))}
+                        <Text style={{ marginLeft: 10, marginBottom: 10, fontSize: 15 ,color:'#000'}}>Select Month</Text>
+                        {this.state.months.map((item, index) => (<Pressable onPress={() => { this.setState({ month: item.id, monthName: item.name, modalMonth: false }) }} style={{ width: '95%', margin: 10, backgroundColor: '#fff', elevation: 10, padding: 10, borderRadius: 5 }}><Text style={{color:'#000'}} key={index}>{item.name}</Text></Pressable>))}
 
                     </ScrollView>
                 </Modal>

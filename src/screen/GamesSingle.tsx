@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableHighlight, StatusBar, Pressable, TextInput, Dimensions, ScrollView, Modal, ToastAndroid, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight, StatusBar, Keyboard, Pressable, TextInput, Dimensions, ScrollView, Modal, ToastAndroid, Image, KeyboardAvoidingView } from 'react-native';
 import StackHeader from '../component/StackHeader';
 import { connect } from "react-redux"
 import Hr from '../component/Hr';
@@ -12,10 +12,11 @@ interface GamesSingleState {
   condition: Number;
   odds: Number;
   data1: string;
-  inputData: string[],
-  inputDataA: string[],
-  inputDataB: string[],
-  confirmOpen: boolean
+  inputData: string[];
+  inputDataA: string[];
+  inputDataB: string[];
+  confirmOpen: boolean;
+  bottomPosition: Number;
 }
 
 class GamesSingle extends Component<GamesSingleProps, GamesSingleState> {
@@ -29,8 +30,27 @@ class GamesSingle extends Component<GamesSingleProps, GamesSingleState> {
       inputData: Array(100).fill(''),
       inputDataA: Array(10).fill(''),
       inputDataB: Array(10).fill(''),
-      confirmOpen: false
+      confirmOpen: false,
+      bottomPosition: 0
     };
+  }
+  _keyboardDidShow = () => {
+    console.log('Keyboard is open');
+    //this.setState({ bottomPosition: 00 });
+  }
+
+  _keyboardDidHide = () => {
+    console.log('Keyboard is closed');
+    //this.setState({ bottomPosition: 0 });
+  }
+
+  componentWillUnmount() {
+    if (this.keyboardDidShowListener) {
+      this.keyboardDidShowListener.remove();
+    }
+    if (this.keyboardDidHideListener) {
+      this.keyboardDidHideListener.remove();
+    }
   }
 
   options = {};
@@ -40,6 +60,14 @@ class GamesSingle extends Component<GamesSingleProps, GamesSingleState> {
       return acc + (val ? parseInt(val) : 0);
     }, 0);
     this.setState({ odds: sum });
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      this._keyboardDidShow
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this._keyboardDidHide
+    );
   }
 
   handlePlay = () => {
@@ -158,33 +186,7 @@ class GamesSingle extends Component<GamesSingleProps, GamesSingleState> {
         this.props.changeLoading(false);
         ToastAndroid.show("Unable to connect to internet", ToastAndroid.SHORT);
       })
-
-
-
-
     }
-
-    // var myHeaders = new Headers();
-    // myHeaders.append("Access-Token", "dw0yvpZT6kmnsWxKLnSRSm6ZV1BnGLpGOcvlxaUhIRWVLWbLFfqpxcxNgr35");
-
-    // var formdata = new FormData();
-    // formdata.append("date", "22-05-2023");
-    // formdata.append("game_id", "15");
-    // formdata.append("digit", "02");
-    // formdata.append("amount", "103");
-    // formdata.append("type", "number");
-
-    // var requestOptions = {
-    //   method: 'POST',
-    //   headers: myHeaders,
-    //   body: formdata,
-    //   redirect: 'follow'
-    // };
-
-    // fetch("https://vipsatta.orfactor.com/api/v1/play-game", requestOptions)
-    //   .then(response => response.text())
-    //   .then(result => console.log(result))
-    //   .catch(error => console.log('error', error));
   }
 
   changePress = (value) => {
@@ -227,99 +229,96 @@ class GamesSingle extends Component<GamesSingleProps, GamesSingleState> {
 
   render() {
     const { params } = this.props.route;
-    return (
-      <View style={styles.container}>
-        <StatusBar barStyle={'dark-content'} backgroundColor={'#ffffff'} />
-        <StackHeader navigation={this.props.navigation} title={params.title} />
-        <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height + 100, top: 0, left: 0, opacity: 0.2 }} />
-        <View style={{ width: '100%', paddingTop: 10, paddingLeft: 10 }}>
-          <TouchableHighlight underlayColor="#ff263d" onPress={() => { this.changePress(0) }} style={[styles.navButtons, { backgroundColor: (this.state.condition !== 0 ? '#ff263d' : '#f87583') }]}><Text style={styles.btnText}>JANTRI</Text></TouchableHighlight>
-          {/* <TouchableHighlight underlayColor="$ff263d" onPress={() => { this.changePress(1) }} style={[styles.navButtons, { backgroundColor: (this.state.condition !== 1 ? '#ff263d' : '#f87583') }]}><Text style={styles.btnText}>CROSSING</Text></TouchableHighlight>
-          <TouchableHighlight underlayColor="#ff263d" onPress={() => { this.changePress(2) }} style={[styles.navButtons, { backgroundColor: (this.state.condition !== 2 ? '#ff263d' : '#f87583') }]}><Text style={styles.btnText}>NO TO NO</Text></TouchableHighlight> */}
-        </View>
-        <ScrollView contentContainerStyle={styles.scrollItems}>
-          <View style={styles.allInputs}>
-            {Array(100).fill().map((_, index) => (
-              <View key={index} style={styles.textContainer}>
-                <Text style={styles.textContainerText}>{index + 1}</Text>
-                <TextInput
-                  keyboardType='numeric'
-                  style={styles.inputContainer}
-                  value={this.state.inputData[index]}
-                  onChangeText={(text) => this.handleInputChange(text, index)}
-                />
-              </View>
-            ))}
-          </View>
-          <Text style={{ paddingLeft: 10, color: '#000' }}>Ander Haruf</Text>
-          <View style={styles.subData}>
-            {Array(10).fill().map((_, index) => (
-              <View key={index} style={styles.textContainer}>
-                <Text style={styles.textContainerText}>{index + 1}</Text>
-                <TextInput
-                  keyboardType='numeric'
-                  style={styles.inputContainer}
-                  value={this.state.inputDataA[index]}
-                  onChangeText={(text) => this.handleInputChangeA(text, index)}
-                />
-              </View>
-            ))}
-          </View>
-          <Text style={{ paddingLeft: 10, color: '#000' }}>Bahar Haruf</Text>
-          <View style={styles.subData}>
-            {Array(10).fill().map((_, index) => (
-              <View key={index} style={styles.textContainer}>
-                <Text style={styles.textContainerText}>{index + 1}</Text>
-                <TextInput
-                  keyboardType='numeric'
-                  style={styles.inputContainer}
-                  value={this.state.inputDataB[index]}
-                  onChangeText={(text) => this.handleInputChangeB(text, index)}
-                />
-              </View>
-            ))}
-          </View>
-        </ScrollView>
+    return (<KeyboardAvoidingView style={styles.container}>
+      <StatusBar barStyle={'dark-content'} backgroundColor={'#ffffff'} />
+      <StackHeader navigation={this.props.navigation} title={params.title} />
+      <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height + 100, top: 0, left: 0, opacity: 0.2 }} />
 
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.confirmOpen}
-          onRequestClose={() => {
-            this.setState({ confirmOpen: false });
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>{params.title}</Text>
-              <Hr />
-              <Text style={{ fontSize: 20, color: '#adadad', marginBottom: 5 }}>Your Balance is: {this.props.user !== null ? this.props.user.balance : ''}</Text>
-              <View style={{ flexDirection: 'row' }}><Pressable
-                style={[styles.button, styles.buttonClose]}
+      <View style={{ width: '100%', paddingTop: 10, paddingLeft: 10 }}>
+        <TouchableHighlight underlayColor="#ff263d" onPress={() => { this.changePress(0) }} style={[styles.navButtons, { backgroundColor: (this.state.condition !== 0 ? '#ff263d' : '#f87583') }]}><Text style={styles.btnText}>JANTRI</Text></TouchableHighlight>
+      </View>
+      <ScrollView contentContainerStyle={styles.scrollItems}>
+        <View style={styles.allInputs}>
+          {Array(100).fill().map((_, index) => (
+            <View key={index} style={styles.textContainer}>
+              <Text style={styles.textContainerText}>{index + 1}</Text>
+              <TextInput
+                keyboardType='numeric'
+                style={styles.inputContainer}
+                value={this.state.inputData[index]}
+                onChangeText={(text) => this.handleInputChange(text, index)}
+              />
+            </View>
+          ))}
+        </View>
+        <Text style={{ paddingLeft: 10, color: '#000' }}>Ander Haruf</Text>
+        <View style={styles.subData}>
+          {Array(10).fill().map((_, index) => (
+            <View key={index} style={styles.textContainer}>
+              <Text style={styles.textContainerText}>{index + 1}</Text>
+              <TextInput
+                keyboardType='numeric'
+                style={styles.inputContainer}
+                value={this.state.inputDataA[index]}
+                onChangeText={(text) => this.handleInputChangeA(text, index)}
+              />
+            </View>
+          ))}
+        </View>
+        <Text style={{ paddingLeft: 10, color: '#000' }}>Bahar Haruf</Text>
+        <View style={styles.subData}>
+          {Array(10).fill().map((_, index) => (
+            <View key={index} style={styles.textContainer}>
+              <Text style={styles.textContainerText}>{index + 1}</Text>
+              <TextInput
+                keyboardType='numeric'
+                style={styles.inputContainer}
+                value={this.state.inputDataB[index]}
+                onChangeText={(text) => this.handleInputChangeB(text, index)}
+              />
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={this.state.confirmOpen}
+        onRequestClose={() => {
+          this.setState({ confirmOpen: false });
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>{params.title}</Text>
+            <Hr />
+            <Text style={{ fontSize: 20, color: '#adadad', marginBottom: 5 }}>Your Balance is: {this.props.user !== null ? this.props.user.balance : ''}</Text>
+            <View style={{ flexDirection: 'row' }}><Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {
+                this.setState({ confirmOpen: false });
+                this.handleConfirm()
+              }}>
+              <Text style={styles.textStyle}>Confirm</Text>
+            </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonCloseCancel]}
                 onPress={() => {
                   this.setState({ confirmOpen: false });
-                  this.handleConfirm()
                 }}>
-                <Text style={styles.textStyle}>Confirm</Text>
-              </Pressable>
-                <Pressable
-                  style={[styles.button, styles.buttonCloseCancel]}
-                  onPress={() => {
-                    this.setState({ confirmOpen: false });
-                  }}>
-                  <Text style={styles.textStyle}>Cancel</Text>
-                </Pressable></View>
+                <Text style={styles.textStyle}>Cancel</Text>
+              </Pressable></View>
 
-            </View>
           </View>
-        </Modal>
-        <View style={styles.bottomContent}>
-          <Text style={styles.paymentText}>₹ {this.state.odds} /-</Text>
-          <Pressable onPress={() => {
-            this.handlePlay();
-          }} style={styles.gameButton}><Text style={styles.gameButtonText}>Play</Text></Pressable>
         </View>
+      </Modal>
+      <View style={[styles.bottomContent, { bottom: this.state.bottomPosition }]}>
+        <Text style={styles.paymentText}>₹ {this.state.odds} /-</Text>
+        <Pressable onPress={() => {
+          this.handlePlay();
+        }} style={styles.gameButton}><Text style={styles.gameButtonText}>Play</Text></Pressable>
       </View>
-    );
+    </KeyboardAvoidingView>);
   }
 }
 
@@ -331,15 +330,15 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   scrollItems: {
-    paddingBottom: 200
+    paddingBottom: 100,
   },
   textContainer: {
     height: 50,
-    width: 33,
+    width: 30,
     borderWidth: 1,
     borderColor: '#7c8083',
     alignSelf: 'flex-start',
-    color: '#000'
+    color: '#000', marginRight: 3
 
   },
   inputContainer: {
@@ -361,7 +360,9 @@ const styles = StyleSheet.create({
     color: '#000'
   },
   container: {
-    flex: 1
+    flex: 1,
+
+    backgroundColor: '#ccc'
   },
   gameButtonText: {
     color: '#fff'
@@ -373,21 +374,19 @@ const styles = StyleSheet.create({
   },
   bottomContent: {
     position: 'absolute',
-    bottom: 0,
     flexDirection: 'row',
     left: 0,
     width: '100%',
     backgroundColor: '#fff',
-    padding: 10,
-    paddingBottom: 30,
-    zIndex: 10,
+    padding: 3,
+    zIndex: 100,
     elevation: 10,
     alignItems: 'center',
     justifyContent: 'space-around',
-    height: 120
+    height: 50,
   },
   paymentText: {
-    fontSize: 33,
+    fontSize: 23,
     color: '#000',
     fontWeight: 'bold'
   },

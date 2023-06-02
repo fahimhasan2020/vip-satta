@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Share, Linking, Image } from 'react-native';
-import { createStackNavigator, TransitionPresets, CardStyleInterpolators } from '@react-navigation/stack';
+import { View, Text, StyleSheet, Share, Linking, Image, Dimensions, ImageBackground } from 'react-native';
+import { createStackNavigator, TransitionPresets, CardStyleInterpolators, TransitionSpecs } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
@@ -19,21 +19,17 @@ const shareWithFriends = async (msg) => {
   });
 }
 const Tab = createBottomTabNavigator();
-
 function NonUserStack() {
-  return (
-    <Stack.Navigator screenOptions={{
-      headerShown: false,
-      gestureEnabled: true,
-      gestureDirection: 'horizontal',
-      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
-    }}>
-      <Stack.Screen name="Splash" component={Splash} />
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Register" component={Register} />
-      <Stack.Screen name="Forget" component={Forget} />
-    </Stack.Navigator>
-  );
+  return (<Stack.Navigator screenOptions={{
+    headerShown: false,
+    gestureEnabled: false,
+  }}
+  >
+    <Stack.Screen name="Splash" component={Splash} />
+    <Stack.Screen name="Login" component={Login} />
+    <Stack.Screen name="Register" component={Register} />
+    <Stack.Screen name="Forget" component={Forget} />
+  </Stack.Navigator>);
 }
 
 
@@ -46,7 +42,7 @@ function MyTabs() {
         tabBarActiveTintColor: "#7e07a6",
         tabBarInactiveTintColor: "#958b99",
         tabBarShowLabel: false,
-        tabBarStyle: { position: 'absolute', bottom: 40, left: 20, right: 20, borderRadius: 20, height: 80 },
+        tabBarStyle: { position: 'absolute', bottom: 20, left: 20, right: 20, borderRadius: 20, borderColor: '#fff', height: 80, backgroundColor: '#fff' },
       }}
     >
 
@@ -155,20 +151,26 @@ function HomeDrawer({ user }) {
 class Index extends Component<Props, State>{
   fetchData = async () => {
     try {
-      const [preferencesResponse, todayGameResponse, allGamesResponse] = await Promise.all([
+      const [preferencesResponse, todayGameResponse, allGamesResponse, closestEndGame] = await Promise.all([
         fetch(this.props.host + "get-preferences"),
         fetch(this.props.host + "today-game"),
         fetch(this.props.host + "get-all-games"),
+        fetch(this.props.host + "game-about-to-close"),
       ]);
       const preferences = await preferencesResponse.json();
       const todayGame = await todayGameResponse.json();
       const allGame = await allGamesResponse.json();
+      const closestGame = await closestEndGame.json();
       this.props.changePreference(preferences);
       if (todayGame.hasOwnProperty("data")) {
+        console.log("todays games payload", todayGame.data);
         this.props.changeTodayGame(todayGame.data);
       }
       if (allGame.hasOwnProperty("data")) {
         this.props.changeAllGame(allGame.data);
+      }
+      if (closestGame.hasOwnProperty("data")) {
+        this.props.changeClosestGame(closestGame.data);
       }
     } catch (error) {
       console.log("no data fetched", error);
@@ -179,7 +181,7 @@ class Index extends Component<Props, State>{
   }
   render() {
     return (
-      <NavigationContainer>
+      <NavigationContainer theme={{ colors: { background: '#7e07a6' } }}>
         {!this.props.loggedIn ? <NonUserStack /> : <HomeDrawer user={this.props.user} />}
         {this.props.loader ? <Loader /> : null}
       </NavigationContainer>
@@ -194,6 +196,7 @@ const mapDispatchToProps = dispatch => {
     changePreference: (value) => { dispatch({ type: 'PREERENCE_SET', logged: value }) },
     changeTodayGame: (value) => { dispatch({ type: 'TODAY_GAME_SET', logged: value }) },
     changeAllGame: (value) => { dispatch({ type: 'GAME_SET', logged: value }) },
+    changeClosestGame: (value) => { dispatch({ type: 'CLOSEST_END_GAME', game: value }) },
   };
 
 };

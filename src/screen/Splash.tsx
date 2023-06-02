@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Animated, StatusBar, Image,ToastAndroid} from 'react-native';
+import { View, Text, StyleSheet, Animated, StatusBar, Image, ToastAndroid } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { hideNavigationBar } from 'react-native-navigation-bar-color';
-import {connect} from "react-redux"
-import {hide} from "react-native-bootsplash"
+import changeNavigationBarColor, { hideNavigationBar } from 'react-native-navigation-bar-color';
+import { connect } from "react-redux"
+import { hide } from "react-native-bootsplash"
 
 interface AppProps {
 
@@ -25,48 +25,47 @@ class Splash extends Component<AppProps, AppState> {
     };
   }
 
-  componentDidMount = async() => {
+  componentDidMount = async () => {
     hide();
-    hideNavigationBar();
+    await changeNavigationBarColor('#7e07a6');
     setTimeout(() => {
       this.setState({ bar: true });
-    }, 800)
+    }, 800);
     Animated.timing(this.state.translateY, {
       toValue: 0,
       duration: 1000,
       useNativeDriver: true,
     }).start();
-   
+
     const loggedValue = await AsyncStorage.getItem("loggedIn");
-    if(loggedValue !== null || loggedValue !== ''){
-      if(loggedValue === 'true'){
-       
+    if (loggedValue !== null || loggedValue !== '') {
+      if (loggedValue === 'true') {
         const token = await AsyncStorage.getItem("token");
         console.log(token);
-        fetch(this.props.host+'get-user-details',{
-          method:'GET',
-          headers:{
-            "Access-Token":token
+        fetch(this.props.host + 'get-user-details', {
+          method: 'GET',
+          headers: {
+            "Access-Token": token
           }
-        }).then((response)=>response.json()).then(async(responseJson)=>{
+        }).then((response) => response.json()).then(async (responseJson) => {
           console.log(responseJson);
-          if(responseJson.status === 1){
+          if (responseJson.status === 1) {
             this.props.changeUser(responseJson.data);
             this.props.changeLogged(true);
-          }else{
-            ToastAndroid.show("Token expired. Login now",ToastAndroid.SHORT);
-            await AsyncStorage.setItem("loggedIn",'false');
+          } else {
+            ToastAndroid.show("Token expired. Login now", ToastAndroid.SHORT);
+            await AsyncStorage.setItem("loggedIn", 'false');
             this.props.navigation.navigate('Login');
           }
-        }).catch(error=>{
-          ToastAndroid.show("Unable to connect to internet",ToastAndroid.SHORT);
+        }).catch(error => {
+          ToastAndroid.show("Unable to connect to internet", ToastAndroid.SHORT);
           this.props.navigation.navigate('Login');
         });
-      }else{
+      } else {
         this.props.navigation.navigate('Login');
       }
-    }else{
-      await AsyncStorage.setItem("loggedIn",'false');
+    } else {
+      await AsyncStorage.setItem("loggedIn", 'false');
       this.props.navigation.navigate('Login');
     }
   };
@@ -105,20 +104,20 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = dispatch => {
-  return{
-      changeAccessToken : (value) => {dispatch({type:'CHANGE_TOKEN',token: value})},
-      changeLogged : (value) => {dispatch({type:'LOGIN',logged: value})},
-      changeUser : (value) => {dispatch({type:'CHANGE_USER',user: value})},
+  return {
+    changeAccessToken: (value) => { dispatch({ type: 'CHANGE_TOKEN', token: value }) },
+    changeLogged: (value) => { dispatch({ type: 'LOGIN', logged: value }) },
+    changeUser: (value) => { dispatch({ type: 'CHANGE_USER', user: value }) },
   };
 
 };
 const mapStateToProps = state => {
   return {
-      accessToken : state.auth.accessToken,
-      host: state.auth.host,
-      loggedIn:state.auth.loggedIn
+    accessToken: state.auth.accessToken,
+    host: state.auth.host,
+    loggedIn: state.auth.loggedIn
   }
 };
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(Splash);
+export default connect(mapStateToProps, mapDispatchToProps)(Splash);

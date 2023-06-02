@@ -17,27 +17,27 @@ interface states {
     tableData: string[];
     sortDate: Date;
     selectedGame: string;
-    history:string[]
+    history: string[]
 }
 
 class Commision extends Component<props, states> {
     constructor(props: props) {
         super(props);
         this.state = {
-            tableHead: ['Date', 'Ref PlayGame', 'Commision'],
+            tableHead: ['Date', 'Player Name', 'Game', 'Commision'],
             tableData: [
 
             ],
             sortDate: new Date(),
             selectedGame: '',
-            history:[]
+            history: []
         };
     }
 
     convertDate = (date: number) => {
         const dateObj = new Date(date);
         return dateObj.toLocaleDateString();
-      }
+    }
 
     componentDidMount = async () => {
         this.props.changeLoader(true);
@@ -55,7 +55,7 @@ class Commision extends Component<props, states> {
                 const newData = this.state.tableData;
                 if (this.state.history.length > 0) {
                     await this.state.history.map(async (item, index) => {
-                        await newData.push([this.convertDate(item.created_at), item.receiver_id, item.amouont]);
+                        await newData.push([this.convertDate(item.created_at), item.player_name, item.game_name, item.amouont]);
                     });
                     this.setState({ tableData: newData });
                 }

@@ -24,7 +24,7 @@ class GamesHistory extends Component<props, states> {
     constructor(props: props) {
         super(props);
         this.state = {
-            tableHead: ['Game', 'AH', 'BH', 'NO', 'Amt', 'WinAmt'],
+            tableHead: ['Game', 'AH', 'BH', 'NO', 'Amt', 'Win Amt'],
             tableData: [
 
             ],
@@ -72,7 +72,7 @@ class GamesHistory extends Component<props, states> {
                 let row = [];
                 let data = responseJson.data[i];
 
-                row.push(data['game_id']);
+                row.push(data['game_name']);
 
                 if (data['type'] === 'number') {
                     row.push('');
@@ -119,16 +119,16 @@ class GamesHistory extends Component<props, states> {
                 <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}>
                     <Pressable onPress={() => {
                         this.showDatePicker();
-                    }} style={{ padding: 10, backgroundColor: '#ccc', width: 100, borderRadius: 5, marginRight: 10 }}><Text>{this.state.sortDate.toLocaleDateString()}</Text></Pressable>
+                    }} style={{ padding: 10, backgroundColor: 'blueviolet', width: 100, borderRadius: 5, marginRight: 10 }}><Text style={{ color: '#fff' }}>{this.state.sortDate.toLocaleDateString()}</Text></Pressable>
                     <Pressable onPress={() => {
                         this.pickerControl('open');
                         //this.showDatePicker();
-                    }} style={{ padding: 10, backgroundColor: '#ccc', width: 100, borderRadius: 5, marginRight: 10 }}>
-                        {this.state.selectedGameLabel !== '' ? <Text>{this.state.selectedGameLabel}</Text> : <Text>Select games</Text>}
+                    }} style={{ padding: 10, backgroundColor: 'blueviolet', width: 100, borderRadius: 5, marginRight: 10 }}>
+                        {this.state.selectedGameLabel !== '' ? <Text style={{ color: '#fff' }}>{this.state.selectedGameLabel}</Text> : <Text style={{ color: '#fff' }}>Select games</Text>}
                     </Pressable>
                     <Pressable onPress={() => {
                         this.search();
-                    }} style={{ padding: 10, backgroundColor: 'blue', width: 40, borderRadius: 5, marginRight: 10 }}><AntDesign name="search1" color="white" size={20} /></Pressable>
+                    }} style={{ padding: 10, backgroundColor: 'blueviolet', width: 40, borderRadius: 5, marginRight: 10 }}><AntDesign name="search1" color="white" size={20} /></Pressable>
 
                 </View>
 
@@ -149,19 +149,22 @@ class GamesHistory extends Component<props, states> {
                             {this.state.allGames.length > 0 ? this.state.allGames.map((item, index) => (
                                 <Pressable
                                     style={{
-                                        width: 250, padding: 20, paddingLeft: 20,
+                                        width: 250, padding: 20,
+                                        paddingLeft: 20,
                                         paddingRight: 20,
-                                        backgroundColor: '#edeef0', marginBottom: 5
+                                        backgroundColor: 'blueviolet',
+                                        marginBottom: 5
                                     }}
-                                    key={index} 
+                                    key={index}
                                     onPress={() => {
                                         this.setState({ gamesModal: false });
                                         this.setState({ selectedGame: item.id, selectedGameLabel: item.name });
                                     }}
                                 >
-                                    <Text>{item.name}</Text>
+                                    <Text style={{ color: '#fff' }}>{item.name}</Text>
                                 </Pressable>
                             )) : null}
+
 
                         </View>
                     </View>

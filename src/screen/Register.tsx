@@ -128,9 +128,6 @@ class Register extends Component<Props, State> {
   componentDidMount(): void {
     console.log(this.props.host);
   }
-
-
-
   handleRegister = async () => {
     this.setState({ loading: true });
     const confirmation = await auth().signInWithPhoneNumber('+88' + this.state.username);
@@ -155,13 +152,12 @@ class Register extends Component<Props, State> {
 
 
   render() {
-    return (<SafeAreaView style={{ flex: 1, backgroundColor: '#7e07a6' }}>
+    return (<SafeAreaView style={{ flex: 1 }}>
       <Image source={require('../assets/bg.png')} style={{ position: 'absolute', width: Dimensions.get("window").width, height: Dimensions.get("window").height + 100, top: 0, left: 0, opacity: 0.2 }} />
       <KeyboardAvoidingView style={{ flex: 1, }} behavior="padding">
         <ScrollView contentContainerStyle={styles.container}>
           <StatusBar barStyle={'light-content'} backgroundColor={'#7e07a6'} />
           <Image source={require('../assets/logo.png')} style={styles.logo} />
-          {/* <MainTitle title="VIP SATTA" colors={['#f4fc03', '#fccf03', '#fc9003']} /> */}
           {!this.state.otpRunning ? <View><PrimaryInput data={this.state.referelId} width={70} setData={this.setDatareferelId} background={'red'} label={'Referel Id'} />
             <PrimaryInput data={this.state.firstName} width={78} setData={this.setDataFirstName} background={'red'} label={'First Name'} />
             <PrimaryInput data={this.state.lastName} width={78} setData={this.setDataLastName} background={'red'} label={'Last Name'} />
@@ -195,12 +191,12 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 100,
+    marginTop: 60,
     paddingBottom: 400
   },
   logo: {
-    height: 300,
-    width: 300,
+    height: 180,
+    width: 180,
     marginBottom: 20
   },
   text: {

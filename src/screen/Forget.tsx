@@ -26,7 +26,6 @@ interface State {
 class Forget extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-
     this.state = {
       username: '',
       password: '',
@@ -201,8 +200,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#7e07a6'
   },
   logo: {
-    height: 300,
-    width: 300,
+    height: 180,
+    width: 180,
     marginBottom: 20
   },
   text: {

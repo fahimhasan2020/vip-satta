@@ -8,7 +8,8 @@ const data = {
     "preference": null,
     "todaysGames": [],
     "allGames": [],
-    "loader": false
+    "loader": false,
+    "closestEndGame": null
 };
 
 const reducer = (state = data, action) => {
@@ -55,6 +56,11 @@ const reducer = (state = data, action) => {
             return {
                 ...state,
                 loader: action.loader
+            }
+        case 'CLOSEST_END_GAME':
+            return {
+                ...state,
+                closestEndGame: action.game
             }
         default:
             return state;
